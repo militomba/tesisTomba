@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'estacionamiento',
+    'codigoQR',
 ]
 
 MIDDLEWARE = [
@@ -96,7 +97,7 @@ DATABASES = {
         'USER': "postgres",
         'PASSWORD': "mili",
         'HOST': "localhost",
-        'PORT' : "5432"
+
         }
 }
 

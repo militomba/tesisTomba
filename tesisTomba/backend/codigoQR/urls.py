@@ -3,6 +3,5 @@ from rest_framework import routers
 from .views import *
 
 router = routers.SimpleRouter()
-router.register(r'centroComercial', centroComercialViewSet, basename='centroComercial')
-
+router.register(r'codigoQR', codigoQR, basename='codigoQR')
 urlpatterns = router.urls

@@ -20,8 +20,11 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', include([
-    path('', include('estacionamiento.urls'))
-    ]))
+    path('estacionamiento/', include([
+        path('', include('estacionamiento.urls'))
+        ])),
+    path('codigoQR/', include([
+        path('', include('codigoQR.urls'))
+        ]))
     
 ]

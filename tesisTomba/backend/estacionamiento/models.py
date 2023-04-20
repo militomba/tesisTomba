@@ -19,7 +19,9 @@ class Estacionamiento(models.Model):
     hora_entrada = models.DateTimeField(auto_now_add=True)
     hora_salida = models.DateTimeField(null=True, blank=True)
     lugar = models.ForeignKey(Lugares, on_delete=models.CASCADE)
+    is_available = models.BooleanField(default=True)
     qr_code = models.CharField(max_length=200, unique=True, blank=True, null=True)
+    assigned_to = models.CharField(max_length=50, blank=True, null=True)
     
 
 

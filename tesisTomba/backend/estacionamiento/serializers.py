@@ -41,6 +41,21 @@ class LugaresUpdateSerializers(serializers.ModelSerializer):
 
 #---------------------------------------------------------------------
 
+class EstacionamientoSerializer(serializers.ModelSerializer):
+    class Meta():
+        model = Estacionamiento
+        fields = '__all__'
+
+class EstacionamientoCreateSerializers(serializers.ModelSerializer):
+    centroComercial = LugaresSerializer(read_only=True)
+    lugar = serializers.PrimaryKeyRelatedField(queryset = Lugares.objects.all(),
+    source='lugar')
+
+    class Meta():
+        model = Estacionamiento
+        fields =('hora_entrada', 'hora_salida','lugar', 'is_available',
+                 'qr_code', 'assigned_to')
+
 
 
     
