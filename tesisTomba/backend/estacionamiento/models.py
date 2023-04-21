@@ -1,5 +1,5 @@
 from django.conf import settings
-
+from codigoQR.models import *
 
 from django.db import models
 
@@ -8,6 +8,7 @@ class CentroComercialEspecifico(models.Model):
     lugares = models.IntegerField(default=0)
     niveles = models.IntegerField(default=0)
     direccion = models.CharField(max_length=200)
+    qrCentroComercial = models.ForeignKey(CodigoQR, on_delete=models.CASCADE, null=False)
 
 class Lugares(models.Model):
     lugar = models.CharField(max_length=30)
@@ -20,8 +21,8 @@ class Estacionamiento(models.Model):
     hora_salida = models.DateTimeField(null=True, blank=True)
     lugar = models.ForeignKey(Lugares, on_delete=models.CASCADE)
     is_available = models.BooleanField(default=True)
-    qr_code = models.CharField(max_length=200, unique=True, blank=True, null=True)
-    assigned_to = models.CharField(max_length=50, blank=True, null=True)
+    qrLugarAsignado = models.ForeignKey(CodigoQR, on_delete=models.CASCADE, null=False, related_name='cQR')
+    
     
 
 

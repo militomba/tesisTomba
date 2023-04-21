@@ -23,8 +23,8 @@ urlpatterns = [
     path('estacionamiento/', include([
         path('', include('estacionamiento.urls'))
         ])),
-    path('codigoQR/', include([
-        path('', include('codigoQR.urls'))
-        ]))
+    # path('codigoQR/', include([
+    #     path('', include('codigoQR.urls'))
+    #     ]))
     
 ]

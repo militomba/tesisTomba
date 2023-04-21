@@ -1,13 +1,21 @@
-from django.shortcuts import render
-from .forms import CodigoQRForm
+from django.shortcuts import render, get_object_or_404, redirect
+from .models import CodigoQR
+from .serializers import *
 from rest_framework import serializers, views, viewsets, status
+from qrcode import QRCode
 
-class codigoQR(viewsets.ViewSet):
-    def crear_codigo_qr(request):
-        if request.method == 'POST':
-            form = CodigoQRForm(request.POST)
-            if form.is_valid():
-                form.save()
-        else:
-            form = CodigoQRForm()
-        return render(request, 'crear_codigo_qr.html', {'form': form})
+# class CodigoQR(viewsets.ViewSet):
+#     def crearCodigoQR(request):
+#         qr = QRCode(version=3, box_size=20, border=2)
+#         qr.add_data()
+#         qr.make(fit=True)
+#         img = qr.make_image(fill_color=(0,0,0), back_color=(255,255,255))
+#         img.save("codigoqr.png")
+
+
+
+
+
+
+
+        

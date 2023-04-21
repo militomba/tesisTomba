@@ -11,7 +11,7 @@ class CentroComercialEspSerializer(serializers.ModelSerializer):
 class CentroComercialEspCreateSerializer(serializers.ModelSerializer):
     class Meta():
         model = CentroComercialEspecifico
-        fields =('nombre', 'lugares', 'niveles', 'direccion')
+        fields =('nombre', 'lugares', 'niveles', 'direccion', 'qrCentroComercial')
 
 class CentroComercialEspUpdateSerializer(serializers.ModelSerializer):
     class Meta():
