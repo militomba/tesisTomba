@@ -5,5 +5,5 @@ from .views import *
 router = routers.SimpleRouter()
 router.register(r'centroComercial', centroComercialViewSet, basename='centroComercial')
 router.register(r'lugares', LugaresViewSet, basename='lugares')
-router.register(r'estacionamiento', EstacionamientoViewSet, basename='estacionamiento')
+router.register(r'lugaresOcupados', LugaresOcupadosViewSet, basename='lugaresOcupados')
 urlpatterns = router.urls

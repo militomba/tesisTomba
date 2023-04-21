@@ -64,34 +64,34 @@ class LugaresViewSet(viewsets.ViewSet):
     def update(self, request, pk=None):
         post_data = request.data
         centroComercial = Lugares.objects.get(pk=pk)
-        serializer = LugaresCreateSerializers(centroComercial, data=post_data,
+        serializer = LugaresUpdateSerializers(centroComercial, data=post_data,
                                                          partial= True)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.error_messages, status=status.HTTP_400_BAD_REQUEST)
 
-class EstacionamientoViewSet(viewsets.ViewSet):
+class LugaresOcupadosViewSet(viewsets.ViewSet):
     def list(self, request):
-        queryset = Estacionamiento.objects.all()
-        serializer = EstacionamientoSerializer(queryset, many=True)
+        queryset = LugaresOcupados.objects.all()
+        serializer = LugaresOcupadosSerializer(queryset, many=True)
         return Response(serializer.data)
     
     def retrive(self, request, pk=None):
-        queryset = Estacionamiento.objects.all()
+        queryset = LugaresOcupados.objects.all()
         centroComercial = get_object_or_404(queryset, centroComercial=pk)
         serializer = CentroComercialEspSerializer(centroComercial)
         return Response(serializer.data)
     
     def create(self, request):
         post_data = request.data
-        serializer = EstacionamientoCreateSerializers(data=post_data)
+        serializer = LugaresOcupadosCreateSerializers(data=post_data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.error_messages, status=status.HTTP_400_BAD_REQUEST)
     
-
+    
         
     
 

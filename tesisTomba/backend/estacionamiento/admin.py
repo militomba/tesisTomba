@@ -3,7 +3,7 @@ from .models import *
 
 admin.site.register(CentroComercialEspecifico)
 admin.site.register(Lugares)
-admin.site.register(Estacionamiento)
+admin.site.register(LugaresOcupados)
 
 
 # Register your models here.

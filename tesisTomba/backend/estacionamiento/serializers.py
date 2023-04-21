@@ -11,7 +11,7 @@ class CentroComercialEspSerializer(serializers.ModelSerializer):
 class CentroComercialEspCreateSerializer(serializers.ModelSerializer):
     class Meta():
         model = CentroComercialEspecifico
-        fields =('nombre', 'lugares', 'niveles', 'direccion', 'qrCentroComercial')
+        fields =('nombre', 'cantidadLugares', 'niveles', 'qrCentroComercial')
 
 class CentroComercialEspUpdateSerializer(serializers.ModelSerializer):
     class Meta():
@@ -32,7 +32,7 @@ class LugaresCreateSerializers(serializers.ModelSerializer):
 
     class Meta():
         model = Lugares
-        fields =('lugare', 'status','nivel', 'id_cc')
+        fields =('lugar', 'status','nivel', 'id_cc')
     
 class LugaresUpdateSerializers(serializers.ModelSerializer):
     class Meta():
@@ -41,20 +41,20 @@ class LugaresUpdateSerializers(serializers.ModelSerializer):
 
 #---------------------------------------------------------------------
 
-class EstacionamientoSerializer(serializers.ModelSerializer):
+class LugaresOcupadosSerializer(serializers.ModelSerializer):
     class Meta():
-        model = Estacionamiento
+        model = LugaresOcupados
         fields = '__all__'
 
-class EstacionamientoCreateSerializers(serializers.ModelSerializer):
+class LugaresOcupadosCreateSerializers(serializers.ModelSerializer):
     centroComercial = LugaresSerializer(read_only=True)
     lugar = serializers.PrimaryKeyRelatedField(queryset = Lugares.objects.all(),
     source='lugar')
 
     class Meta():
-        model = Estacionamiento
+        model = LugaresOcupados
         fields =('hora_entrada', 'hora_salida','lugar', 'is_available',
-                 'qr_code', 'assigned_to')
+                 'qr_code')
 
 
 
