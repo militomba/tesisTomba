@@ -48,14 +48,16 @@ class LugaresOcupadosSerializer(serializers.ModelSerializer):
 
 class LugaresOcupadosCreateSerializers(serializers.ModelSerializer):
     centroComercial = LugaresSerializer(read_only=True)
-    lugar = serializers.PrimaryKeyRelatedField(queryset = Lugares.objects.all(),
-    source='lugar')
+    lugar = serializers.PrimaryKeyRelatedField(queryset = Lugares.lugaresDisponibles().all(),
+    source='id_lugar')
 
     class Meta():
         model = LugaresOcupados
-        fields =('hora_entrada', 'hora_salida','lugar', 'is_available',
-                 'qr_code')
+        fields =('hora_entrada', 'hora_salida','id_lugar', 'qr_code', 'available')
 
-
+class LugaresOcupadosUpdateSerializers(serializers.ModelSerializer):
+    class Meta():
+        model = LugaresOcupados
+        fields =('available')
 
     

@@ -71,27 +71,46 @@ class LugaresViewSet(viewsets.ViewSet):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.error_messages, status=status.HTTP_400_BAD_REQUEST)
 
+
+    
 class LugaresOcupadosViewSet(viewsets.ViewSet):
     def list(self, request):
         queryset = LugaresOcupados.objects.all()
         serializer = LugaresOcupadosSerializer(queryset, many=True)
         return Response(serializer.data)
     
+    
     def retrive(self, request, pk=None):
         queryset = LugaresOcupados.objects.all()
         centroComercial = get_object_or_404(queryset, centroComercial=pk)
-        serializer = CentroComercialEspSerializer(centroComercial)
+        serializer = LugaresOcupadosSerializer(centroComercial)
         return Response(serializer.data)
+
+
     
     def create(self, request):
         post_data = request.data
+        lugar_id = post_data.get('id_lugar')
+        lugar = Lugares.objects.filter(id=lugar_id, status=True).first()
+        if lugar is None:
+            return Response({'error': 'El lugar no está disponible'}, status=status.HTTP_400_BAD_REQUEST)
         serializer = LugaresOcupadosCreateSerializers(data=post_data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.error_messages, status=status.HTTP_400_BAD_REQUEST)
     
-    
+    def update(self, request, pk=None):
+        post_data = request.data
+        lug_ocupados = LugaresOcupados.objects.get(pk=pk)
+        serializer = LugaresOcupadosUpdateSerializers(lug_ocupados, data=post_data,
+                                                         partial= True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.error_messages, status=status.HTTP_400_BAD_REQUEST)
+
+
         
     
 
