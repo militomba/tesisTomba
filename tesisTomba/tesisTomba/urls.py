@@ -18,15 +18,11 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
-
-
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('estacionamiento/', include([
+     path('', include([
         path('', include('estacionamiento.urls'))
         ])),
-    path('codigoQR/',include([
-    path('', include('codigoQR.urls'))
-    ]))
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+

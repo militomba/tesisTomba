@@ -21,12 +21,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-3+z5*f8=&54$ax^#ye^1l$7ucj(i^r-^@7(2x$wfo9w+%23du^'
+SECRET_KEY = 'django-insecure-=0lkm!v2&^7v393fbk#o8s0%8pm_yl48zix=sy-5)l1@gm%5o#'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -39,7 +39,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'estacionamiento',
-    'codigoQR'
 ]
 
 MIDDLEWARE = [
@@ -57,7 +56,7 @@ ROOT_URLCONF = 'tesisTomba.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'DIRS':  [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -79,9 +78,9 @@ WSGI_APPLICATION = 'tesisTomba.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': "tesis",
-        'USER': "tesismili",
-        'PASSWORD': "mili",
+        'NAME': "estacionamiento",
+        'USER': "miliprueba",
+        'PASSWORD': "1234",
         'HOST': "localhost",
     }
 }

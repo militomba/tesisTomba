@@ -1,111 +1,87 @@
-from django.http import HttpResponse
-from django.shortcuts import render
-from estacionamiento.models import *
-from .serializers import *
-from rest_framework import serializers, views, viewsets, status
-from django.db.models import query
-from django.shortcuts import get_object_or_404
-from rest_framework import response
+from datetime import datetime
+from pyexpat.errors import messages
+from django.shortcuts import render, get_object_or_404, redirect
+from .models import Lugar, LugarOcupado
+from django.urls import reverse
+from django.core.files.base import ContentFile
+import qrcode
+from io import BytesIO
+from rest_framework import viewsets, status
 from rest_framework.response import Response
-from codigoQR import *
+import pyzbar.pyzbar as pyzbar
+from PIL import Image
+from django.core.files.uploadedfile import InMemoryUploadedFile
+
+def asignarLugar():
+    lugarAsignado = Lugar.objects.filter(status=True).first()
+
+    if lugarAsignado is None:
+        return None
+    
+    lugarAsignado.status = False
+    lugarAsignado.save()
+
+    #agrego un lugar a la tabla LugarOcupado
+    lugarOcupado = LugarOcupado.objects.create(lugar=lugarAsignado,   
+                                               fecha = datetime.now().date(),
+                                               hora_entrada = datetime.now().time()) 
+                                            
+    lugarOcupado.save()
+
+    centroComercial = lugarAsignado.id_cc.nombre
+
+    #generar codigo QR
+    qr = qrcode.QRCode(version=1, box_size=10, border=5)
+    qr.add_data(lugarAsignado.id)
+    qr.make(fit=True)
+    img = qr.make_image(fill='black', back_color='white')
+
+    #guardar qr
+    buffer = BytesIO()
+    img.save(buffer, 'PNG')
+    buffer.seek(0)
+    qr_file = InMemoryUploadedFile(buffer, None, lugarAsignado.lugar+'.png', 'img/png', buffer.getbuffer().nbytes, None)
+    # lugarAsignado.codigo_qr.save(f'{lugarAsignado.lugar}.png',ContentFile(buffer.getvalue()),save=False)
+    lugarAsignado.codigo_qr.save(lugarAsignado.lugar+'.png', qr_file, save=True)
+    lugarAsignado.save()
+
+    imagen = lugarAsignado.codigo_qr.url
+
+    info={
+        'lugar': lugarAsignado,
+        'nivel':lugarAsignado.nivel,
+        'fecha':lugarOcupado.fecha,
+        'horario':lugarOcupado.hora_entrada,
+        'centroComercial': centroComercial,
+        'imagen': imagen
+    }
+    return info
 
 
 
-class centroComercialViewSet(viewsets.ViewSet):
-    def list(self, request):
-        queryset = CentroComercialEspecifico.objects.all()
-        serializer = CentroComercialEspSerializer(queryset, many=True)
-        return Response(serializer.data)
+def detalleLugar(request):
+    infoLugar = asignarLugar()
     
-    def retrive(self, request, pk=None):
-        queryset = CentroComercialEspecifico.objects.all()
-        centroComercial = get_object_or_404(queryset, centroComercial=pk)
-        serializer = CentroComercialEspSerializer(centroComercial)
-        return Response(serializer.data)
-    
-    def create(self, request):
-        post_data = request.data
-        serializer = CentroComercialEspCreateSerializer(data=post_data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.error_messages, status=status.HTTP_400_BAD_REQUEST)
-    
-    def update(self, request, pk=None):
-        post_data = request.data
-        centroComercial = CentroComercialEspecifico.objects.get(pk=pk)
-        serializer = CentroComercialEspUpdateSerializer(centroComercial, data=post_data,
-                                                         partial= True)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.error_messages, status=status.HTTP_400_BAD_REQUEST)
+    if infoLugar:
+        lugar = infoLugar['lugar']
+        nivel =infoLugar['nivel']
+        imagen = infoLugar['imagen']
+        fecha=infoLugar['fecha']
+        hora = infoLugar['horario']
+        centroComercial = infoLugar['centroComercial']
+        
+        
+        context={
+            'lugar': lugar,
+            'nivel':nivel,
+            'fecha':fecha,
+            'horario':hora,
+            'imagen': imagen,
+            'centroComercial': centroComercial
+        }
+        
 
-class LugaresViewSet(viewsets.ViewSet):
-    def list(self, request):
-        queryset = Lugares.objects.all()
-        serializer = LugaresSerializer(queryset, many=True)
-        return Response(serializer.data)
-    
-    def retrive(self, request, pk=None):
-        queryset = Lugares.objects.all()
-        centroComercial = get_object_or_404(queryset, centroComercial=pk)
-        serializer = CentroComercialEspSerializer(centroComercial)
-        return Response(serializer.data)
-    
-    def create(self, request):
-        post_data = request.data
-        serializer = LugaresCreateSerializers(data=post_data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.error_messages, status=status.HTTP_400_BAD_REQUEST)
-    
-    def update(self, request, pk=None):
-        post_data = request.data
-        centroComercial = Lugares.objects.get(pk=pk)
-        serializer = LugaresUpdateSerializers(centroComercial, data=post_data,
-                                                         partial= True)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.error_messages, status=status.HTTP_400_BAD_REQUEST)
-
-
-    
-class LugaresOcupadosViewSet(viewsets.ViewSet):
-    def list(self, request):
-        queryset = LugaresOcupados.objects.all()
-        serializer = LugaresOcupadosSerializer(queryset, many=True)
-        return Response(serializer.data)
-    
-    
-    def retrive(self, request, pk=None):
-        queryset = LugaresOcupados.objects.all()
-        centroComercial = get_object_or_404(queryset, centroComercial=pk)
-        serializer = LugaresOcupadosSerializer(centroComercial)
-        return Response(serializer.data)
-
-
-    
-    def create(self, request):
-        post_data = request.data
-        lugar_id = post_data.get('id_lugar')
-        lugar = Lugares.objects.filter(id=lugar_id, status=True).first()
-        if lugar is None:
-            return Response({'error': 'El lugar no está disponible'}, status=status.HTTP_400_BAD_REQUEST)
-        serializer = LugaresOcupadosCreateSerializers(data=post_data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.error_messages, status=status.HTTP_400_BAD_REQUEST)
-    
-    def update(self, request, pk=None):
-        post_data = request.data
-        lug_ocupados = LugaresOcupados.objects.get(pk=pk)
-        serializer = LugaresOcupadosUpdateSerializers(lug_ocupados, data=post_data,
-                                                         partial= True)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.error_messages, status=status.HTTP_400_BAD_REQUEST)
+        return render(request, 'detalleLugar.html', context)
+    else:
+        # Si no hay lugares disponibles, renderizar un template con un mensaje indicando que no hay lugares disponibles
+        return render(request, 'sin_lugares.html')
