@@ -4,6 +4,7 @@ import qrcode
 from io import BytesIO
 from django.core.files.base import ContentFile
 import uuid
+from PIL import Image
 
 class CentroComercialEspecifico(models.Model):
     nombre = models.CharField(max_length=200)
@@ -45,11 +46,11 @@ class Lugar(models.Model):
     codigo_qr = models.ImageField(upload_to='qr_code', null=True, blank=True)
     
     def __str__(self):
-        return(self.lugar)
-
+        lugar = self.lugar
+        cc = self.id_cc.nombre
+        status = self.status
+        return (cc + " - Lugar: "+ lugar +" - Status: " + str(status))
     
-    
-
 
 
 
@@ -59,4 +60,5 @@ class LugarOcupado(models.Model):
     hora_entrada = models.TimeField(null=True, blank=True)
     
     def __str__(self):
-        return(self.lugar.lugar)
+        return("Lugar: " + self.lugar.lugar + " - "+
+               self.lugar.id_cc.nombre)
