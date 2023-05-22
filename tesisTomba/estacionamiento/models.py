@@ -5,9 +5,11 @@ from io import BytesIO
 from django.core.files.base import ContentFile
 import uuid
 from PIL import Image
+from django.core.exceptions import ValidationError
+
 
 class CentroComercialEspecifico(models.Model):
-    nombre = models.CharField(max_length=200)
+    nombre = models.CharField(max_length=200, unique=True)
     cantidadLugares = models.IntegerField(default=0)
     niveles = models.IntegerField(default=0)
     imagen = models.ImageField(upload_to='qr_Code', blank=True, null=True)
@@ -16,7 +18,8 @@ class CentroComercialEspecifico(models.Model):
     def __str__(self):
         return(self.nombre)
     
-    def save(self, *args, **kwargs):
+   
+    def crear_centro_comercial(self, *args, **kwargs):
         self.nombre = self.nombre.upper()
          # Generar el contenido del código QR
         contenido = self.contenido
@@ -34,6 +37,7 @@ class CentroComercialEspecifico(models.Model):
         buffer.close()
         # Llamar al método save() del modelo base
         super().save(*args, **kwargs)
+
     
     # def save(self,*args, **kwargs):
     #     self.nombre = self.nombre.upper()
