@@ -37,7 +37,11 @@
             margin-bottom: 10px;
         }
 
-        .btn-delete {
+        .btn-details-eliminar {
+            position: absolute;
+            top: 17%;
+            left: 35px;
+            transform: translateY(-50%);
             text-decoration: none;
             color: #fff;
             background-color: #ff0000;
@@ -45,8 +49,24 @@
             border-radius: 4px;
             font-weight: bold;
         }
-
-        .btn-delete:hover {
+        
+        .btn-details-eliminar:hover {
+            background-color: #cc0000;
+        }
+        .btn-details-cancelar {
+            position: absolute;
+            top: 17%;
+            left: 140px;
+            transform: translateY(-50%);
+            text-decoration: none;
+            color: #fff;
+            background-color: #ff0000;
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        
+        .btn-details-cancelar:hover {
             background-color: #cc0000;
         }
     </style>
@@ -56,8 +76,9 @@
     <p>¿Estás seguro de que deseas eliminar el centro comercial "{{ centroComercial.nombre }}"?</p>
     <form method="post">
         {% csrf_token %}
-        <button class="btn-delete" type="submit" >ELIMINAR</button>
-        <a href="{% url 'centroComercial' %}" class="btn-details">Cancelar</a>
+        <button class="btn-details-eliminar" type="submit" >ELIMINAR</button>
+        
+        <button type="buttom" class= "btn-details-cancelar"formaction="{% url 'detalle_centro' centroComercial.nombre   %}">CANCELAR</button>
     </form>
 </body>
 </html>

@@ -50,24 +50,7 @@
         button:hover {
             background-color: #0056b3;
         }
-        .btn-details {
-            position: absolute;
-            top: 92%;
-            right: 20px;
-            transform: translateY(-50%);
-            text-decoration: none;
-            color: #333;
-            background-color: #e7e7e7;
-            padding: 8px 16px;
-            border-radius: 4px;
-            font-weight: bold;
-        }
-
-        .btn-details:hover {
-          background-color: #0056b3;
-          color: #fff;
-        }
-        .btn-details {
+        .btn-details-act {
             position: absolute;
             top: 96%;
             right: 30px;
@@ -80,7 +63,24 @@
             font-weight: bold;
         }
         
-        .btn-details-editar:hover {
+        .btn-details-act:hover {
+            background-color: #0088cc; /* Color azul claro más oscuro en hover */
+        }
+
+        .btn-details-volver {
+            position: absolute;
+            top: 96%;
+            right: 160px;
+            transform: translateY(-50%);
+            text-decoration: none;
+            color: #fff;
+            background-color: #00aaff; /* Color azul claro */
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        
+        .btn-details-volver:hover {
             background-color: #0088cc; /* Color azul claro más oscuro en hover */
         }
       
@@ -137,11 +137,7 @@
     <input type="text" class="form-control" id="contenido" name="contenido" value="{{contenido}}" required>
   </div>
   <img src="{{ imagen}}" alt="Código QR:">
-  <button type="buttom" class="btn-generate-qr"> Actualizar CodigoQR</button>
   <div id="imagen">
-    {% if imagen %}
-      <h2>Código QR:</h2>
-      <img src="{{ imagen}}" alt="Código QR">
-    {% endif %}
   </div>
-  <button type="submit" class= "btn-details">ACTUALIZAR CENTRO COMERCIAL</button>
+  <button type="submit" class= "btn-details-act">GUARDAR</button>
+  <button type="buttom" class= "btn-details-volver"formaction="{% url 'detalle_centro' nombre  %}">CANCELAR</button>
