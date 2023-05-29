@@ -43,7 +43,7 @@ class CentroComercialEspecifico(models.Model):
     #     self.nombre = self.nombre.upper()
     #     super().save(*args, **kwargs)
 class Lugar(models.Model):
-    lugar = models.CharField(max_length=30)
+    lugar = models.CharField(max_length=30, unique=True)
     status = models.BooleanField(default=True)
     nivel =  models.IntegerField(default=0)
     id_cc = models.ForeignKey(CentroComercialEspecifico, on_delete=models.CASCADE, null=False, related_name='lugares_cc')

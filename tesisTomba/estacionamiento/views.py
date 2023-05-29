@@ -20,8 +20,8 @@ class CentrosComercialesViews(viewsets.ViewSet):
         ccListados = CentroComercialEspecifico.objects.all()
         return render(request, "gestionCentrosComerciales.html", {"cc": ccListados})
     
-    def detalle_centro(request, nombre):
-        centro = get_object_or_404(CentroComercialEspecifico, nombre=nombre)
+    def detalle_centro(request, nombreCC):
+        centro = get_object_or_404(CentroComercialEspecifico, nombreCC)
         return render(request, 'detalle_centro.html', {'nombre': centro.nombre,'cantLugares': centro.cantidadLugares,'niveles':centro.niveles ,'imagen': centro.imagen.url})
         #return render(request, 'detalle_centro.html', {'cc': centro})
 
@@ -86,8 +86,36 @@ class CentrosComercialesViews(viewsets.ViewSet):
 
             return redirect('detalle_centro', nombre=nombre)
         
-        return render(request, "edicionCentroCoemrcial.html", {'nombre': cc.nombre,'cantLugares': cc.cantidadLugares,'niveles':cc.niveles ,'imagen': cc.imagen.url, 'contenido':cc.contenido})
+        return render(request, "edicionCentroCoemrcial.html", {'id':id,'nombre': cc.nombre,'cantLugares': cc.cantidadLugares,'niveles':cc.niveles ,'imagen': cc.imagen.url, 'contenido':cc.contenido})
+
+class LugaresViews(viewsets.ViewSet):
+    def listLugares(request, nombreCC):
+        centroComercial = get_object_or_404(CentroComercialEspecifico, nombre=nombreCC)
+
+        lugar= Lugar.objects.filter(id_cc=centroComercial)
+        return render(request, 'gestionLugares.html', {'lugar':lugar, 'centroComecial':centroComercial})            
+
+    def detalleLugar(request, lugar):
+        detalleLugar= get_object_or_404(Lugar, lugar=lugar)
+        status = detalleLugar.status
+        centroComercial = detalleLugar.id_cc.nombre
+        if status == True:
+            status="ACTIVO"
+        else:
+            status='INACTIVO'
+        return render(request, 'detalleLugar.html', {'lugar': detalleLugar.lugar, 'status':status, 'nivel':detalleLugar.nivel, 'centroComercial':centroComercial})
+    
+
+    def eliminarLugar(request, lugar):
+        lugar = Lugar.objects.get(lugar=lugar)
+        cc = lugar.id_cc.nombre
+        if request.method == 'POST':
+            lugar.delete()
+            return redirect('listLugares/', cc) 
+        return render(request, 'eliminarLugar.html', {'lugar':lugar})
+                
             
+
 
 class Funciones(viewsets.ViewSet):
     def asignarLugar():
@@ -177,8 +205,9 @@ class Funciones(viewsets.ViewSet):
             }
             
 
-            return render(request, 'detalleLugar.html', context)
+            return render(request, 'detalleLugarAsignado.html', context)
         else:
+            
             # Si no hay lugares disponibles, renderizar un template con un mensaje indicando que no hay lugares disponibles
             return render(request, 'sin_lugares.html')
         

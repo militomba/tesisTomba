@@ -108,18 +108,18 @@
     </style>
 </head>
 <body>
-    <h1>{{ nombre}}</h1>
+    <h1>LUGAR:{{lugar}}</h1>
     <div class="center">
     </div>
     <div class="details-container">
-        <p><strong>Cantidad de Lugares:</strong> {{ cantLugares }}</p>
-        <p><strong>Niveles:</strong> {{ niveles }}</p>
-        <img src="{{ imagen }}" alt="Código QR de {{ nombre }}">
-        <a href="{% url 'eliminarCentro' nombre %}" class="btn-details-eliminar">ELIMINAR</a>
-        <a href="{% url 'edicionCentro' nombre %}" class="btn-details-editar">EDITAR</a>
-        <a href="{% url 'listLugares' id  %}" class="btn-details-lugar">LUGARES</a>
+        <p><strong>STATUS:</strong> {{ status }}</p>
+        <p><strong>NIVEL:</strong> {{ nivel }}</p>
+        <a href="{% url 'eliminarLugar' lugar %}" class="btn-details-eliminar">ELIMINAR</a>
+
     </div>
-    <a href="{% url 'centroComercial' %}" class="btn-details">VOLVER A LA PAGINA PRINCIPAL</a>
+    <a href="{% url 'listLugares' centroComercial%}" class="btn-details">VOLVER</a>
+
+    
     
 </body>
 </html>
