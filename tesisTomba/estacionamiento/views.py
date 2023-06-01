@@ -14,6 +14,10 @@ from PIL import Image
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.http import HttpResponse
 from django.db import IntegrityError
+import jwt
+import json
+from datetime import datetime, timedelta
+from django.core import serializers
 
 class CentrosComercialesViews(viewsets.ViewSet):
     def listCentroComercial(request):
@@ -21,7 +25,7 @@ class CentrosComercialesViews(viewsets.ViewSet):
         return render(request, "gestionCentrosComerciales.html", {"cc": ccListados})
     
     def detalle_centro(request, nombreCC):
-        centro = get_object_or_404(CentroComercialEspecifico, nombreCC)
+        centro = get_object_or_404(CentroComercialEspecifico, nombre =nombreCC)
         return render(request, 'detalle_centro.html', {'nombre': centro.nombre,'cantLugares': centro.cantidadLugares,'niveles':centro.niveles ,'imagen': centro.imagen.url})
         #return render(request, 'detalle_centro.html', {'cc': centro})
 
@@ -73,19 +77,26 @@ class CentrosComercialesViews(viewsets.ViewSet):
             contenido = request.POST.get('contenido')
             imagen = request.FILES.get('imagen')
 
-            cc.nombre = nombre
-            cc.cantidadLugares=cantidad_lugares
-            cc.niveles = niveles
-            cc.contenido = contenido
+            if (nombre != cc.nombre or
+                cantidad_lugares != cc.cantidadLugares or
+                niveles != cc.niveles or
+                contenido != cc.contenido or
+                imagen is not None):
+            # Al menos uno de los datos es diferente, se procede a realizar la actualización
+            
+                cc.nombre = nombre
+                cc.cantidadLugares=cantidad_lugares
+                cc.niveles = niveles
+                cc.contenido = contenido
 
-            if imagen:
-                cc.imagen=imagen
-                
-            cc.crear_centro_comercial()
-            cc.save()
+                if imagen:
+                    cc.imagen=imagen
+                    
+                cc.crear_centro_comercial()
+                cc.save()
 
-            return redirect('detalle_centro', nombre=nombre)
-        
+            return redirect('detalle_centro', cc.nombre)
+
         return render(request, "edicionCentroCoemrcial.html", {'id':id,'nombre': cc.nombre,'cantLugares': cc.cantidadLugares,'niveles':cc.niveles ,'imagen': cc.imagen.url, 'contenido':cc.contenido})
 
 class LugaresViews(viewsets.ViewSet):
@@ -95,15 +106,20 @@ class LugaresViews(viewsets.ViewSet):
         lugar= Lugar.objects.filter(id_cc=centroComercial)
         return render(request, 'gestionLugares.html', {'lugar':lugar, 'centroComecial':centroComercial})            
 
-    def detalleLugar(request, lugar):
-        detalleLugar= get_object_or_404(Lugar, lugar=lugar)
+    def detalleLugar(request, lugar, id_cc):
+        detalleLugar= Lugar.objects.get(lugar=lugar, id_cc=id_cc)
         status = detalleLugar.status
         centroComercial = detalleLugar.id_cc.nombre
+        qr = detalleLugar.codigo_qr        
         if status == True:
             status="ACTIVO"
         else:
             status='INACTIVO'
-        return render(request, 'detalleLugar.html', {'lugar': detalleLugar.lugar, 'status':status, 'nivel':detalleLugar.nivel, 'centroComercial':centroComercial})
+        
+        qr_vacio = False
+        if not detalleLugar.codigo_qr:
+            qr_vacio = True
+        return render(request, 'detalleLugar.html', {'lugar': detalleLugar.lugar, 'status':status, 'nivel':detalleLugar.nivel, 'centroComercial':centroComercial, 'qr':qr, 'qr_vacio': qr_vacio})
     
 
     def eliminarLugar(request, lugar):
@@ -114,13 +130,41 @@ class LugaresViews(viewsets.ViewSet):
             return redirect('listLugares/', cc) 
         return render(request, 'eliminarLugar.html', {'lugar':lugar})
                 
+    
+    def crearLugar(request, id_cc):
+        centroComercial=CentroComercialEspecifico.objects.get(id=id_cc)
+        if request.method == 'POST':
+            lugar = request.POST.get('lugar')
+            nivel = int(request.POST.get('nivel'))
+            status = request.POST.get('status')
+            codigo_qr = request.FILES.get('codigo_qr')
+            id_cc = request.POST.get('id_cc')
+
+            lugar_existente = Lugar.objects.filter(lugar=lugar, id_cc=centroComercial.id)
+
+            if lugar_existente.exists():
+                error = "Ya existe un lugar con este nombre en el centro comercial."
+                return render(request, 'crearLugar.html', {'cc': centroComercial, 'error': error})
+        
+            lugarNuevo = Lugar(lugar= lugar,
+                            nivel=nivel,
+                            status=status,
+                            id_cc=centroComercial, 
+                            codigo_qr=codigo_qr)
             
+            lugarNuevo.save()
+            return redirect('listLugares', centroComercial.nombre )
+            #return render(request, 'crearLugar.html', {'lugar':lugarNuevo, 'cc':centroComercial})
+            
+                
+
+        return render(request, 'crearLugar.html', {'cc':centroComercial})
 
 
 class Funciones(viewsets.ViewSet):
     def asignarLugar():
         lugarAsignado = Lugar.objects.filter(status=True).first()
-
+        
         if lugarAsignado is None:
             return None
         
@@ -133,12 +177,15 @@ class Funciones(viewsets.ViewSet):
                                                 hora_entrada = datetime.now().time()) 
                                                 
         lugarOcupado.save()
-
+        
         centroComercial = lugarAsignado.id_cc.nombre
+        
+
+        #generar 
 
         #generar codigo QR
         qr = qrcode.QRCode(version=1, box_size=10, border=5)
-        qr.add_data('http://192.168.54.175:8081/liberarLugar/'+str(lugarAsignado.lugar)+'/')
+        qr.add_data('http://192.168.54.175:8081/funcion/liberarLugar/'+str(lugarAsignado.lugar)+'/')
         qr.make(fit=True)
         img = qr.make_image(fill='black', back_color='white')
 
@@ -146,9 +193,10 @@ class Funciones(viewsets.ViewSet):
         buffer = BytesIO()
         img.save(buffer, 'PNG')
         buffer.seek(0)
-        qr_file = InMemoryUploadedFile(buffer, None, lugarAsignado.lugar+'.png', 'img/png', buffer.getbuffer().nbytes, None)
+        qr_file = InMemoryUploadedFile(buffer, None, lugarAsignado.lugar+centroComercial+'.png', 'img/png', buffer.getbuffer().nbytes, None)
         # lugarAsignado.codigo_qr.save(f'{lugarAsignado.lugar}.png',ContentFile(buffer.getvalue()),save=False)
         lugarAsignado.codigo_qr.save(lugarAsignado.lugar+centroComercial+'.png', qr_file, save=True)
+        lugarAsignado.codigo_qr_expiracion = datetime.now() + timedelta(hours=24)  # Establecer expiración de 24 horas
         lugarAsignado.save()
 
         imagen = lugarAsignado.codigo_qr.url
@@ -161,6 +209,8 @@ class Funciones(viewsets.ViewSet):
             'centroComercial': centroComercial,
             'imagen': imagen
         }
+        
+        
         return info
 
 

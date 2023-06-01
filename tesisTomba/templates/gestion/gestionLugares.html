@@ -55,19 +55,42 @@
 
         .btn-add {
             text-decoration: none;
+            top: 7%;
+            right: 20px;
             color: #333;
             background-color: #e7e7e7;
             padding: 8px 16px;
             border-radius: 4px;
             font-weight: bold;
             float: right;
-            margin-top: -60px;
+            margin-top: -50px;
         }
 
         .btn-add:hover {
             background-color: #0056b3;
             color: #fff;
         }
+        .btn-details-volver {
+            position: absolute;
+            top: 3%;
+            left: 20px;
+            transform: translateY(-50%);
+            text-decoration: none;
+            color: #333;
+            background-color: #e7e7e7;
+            padding: 6px 12px;
+            border-radius: px;
+            font-weight: bold;
+        }
+
+        .btn-details-volver:hover {
+            background-color: #0056b3;
+            color: #fff;
+        }
+        .boton-final {
+            margin-top: 20px;
+            text-align: right;
+          }
     </style>
 </head>
 <body>
@@ -75,13 +98,16 @@
     <h1>
        LISTADO DE LUGARES DE {{centroComecial.nombre}}
     </h1>
-    {% comment %} <a href="{% url 'crearLugar' centroComecial.nombre%}" class="btn-add">Agregar Lugar</a> {% endcomment %}
+    <a href="{% url 'detalle_centro' centroComecial.nombre %}" class="btn-details-volver">VOLVER </a>
+     
+   
+    <a href="{% url 'crearLugar' centroComecial.id%}" class="btn-add">Agregar Lugar</a>    
 
     <ul>
         {% for lugar in lugar %}
             <li>
                 <h2>LUGAR: {{ lugar.lugar }}</h2>
-                <a href="{% url 'detalleLugar' lugar.lugar %}" class="btn-details">Ver detalles</a>
+                <a href="{% url 'detalleLugar' lugar.lugar  centroComecial.id%}" class="btn-details">Ver detalles</a>
                 
             </li>
         {% endfor %}

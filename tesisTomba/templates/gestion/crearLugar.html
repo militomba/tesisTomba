@@ -76,16 +76,21 @@
 <body>
     <h1>Crear Lugar</h1>
 
-    {% if error %}
-        <p>Error: {{ error }}</p>
-        <a class="btn-details-volver" href="{% url 'crearLugar' nombreCC%}">Volver</a>
-    {% else %}
-        <form method="post" enctype="multipart/form-data">
+
+        <form method="post" enctype="multipart/form-data"action="{% url 'crearLugar' cc.id%}">{% csrf_token%}
             {% csrf_token %}
 
             <div>
-                <label for="lugar">Nombre del lugar:</label>
+                <label for="lugar">Lugar:</label>
                 <input type="text" id="lugar" name="lugar" required>
+                {% if error %}
+                <script>
+                  window.onload = function() {
+                    alert("{{ error }}");
+                    
+                  };
+                </script>
+              {% endif %}
             </div>
 
             <div>
@@ -94,21 +99,33 @@
             </div>
 
             <div>
-                <label for="status">Estado:</label>
-                <select id="status" name="status" required>
-                    <option value="True">Activo</option>
-                    <option value="False">Inactivo</option>
-                </select>
-            </div>
+                <label for="status">Status:</label>
+                <div class="radio-buttons">
+                    <label class="radio-label">
+                        <input type="radio" name="status" value="True" {% if request.POST.status == 'True' %}checked{% endif %}>
+                        Activo
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="status" value="False" {% if request.POST.status == 'False' %}checked{% endif %}>
+                        Inactivo
+                    </label>
+                </div>
+              </div>
 
             <div>
+            <label for="id_cc">Centro comercial:
+                {{cc.nombre}}
+            </label>
+        </div>
+
+            {% comment %} <div>
                 <label for="codigo_qr">Código QR:</label>
                 <input type="file" id="codigo_qr" name="codigo_qr" required>
-            </div>
+            </div> {% endcomment %}
 
             <button type="submit" class="btn-details">Crear Lugar</button>
         </form>
-    {% endif %}
+    
 </body>
 </html>
 

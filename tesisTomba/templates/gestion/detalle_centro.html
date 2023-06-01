@@ -90,7 +90,7 @@
         .btn-details-lugar {
             position: absolute;
             top: 60%;
-            right: 250px;
+            right: 245px;
             transform: translateY(-50%);
             text-decoration: none;
             color: #fff;
@@ -117,7 +117,7 @@
         <img src="{{ imagen }}" alt="Código QR de {{ nombre }}">
         <a href="{% url 'eliminarCentro' nombre %}" class="btn-details-eliminar">ELIMINAR</a>
         <a href="{% url 'edicionCentro' nombre %}" class="btn-details-editar">EDITAR</a>
-        <a href="{% url 'listLugares' id  %}" class="btn-details-lugar">LUGARES</a>
+        <a href="{% url 'listLugares' nombre  %}" class="btn-details-lugar">LUGARES</a>
     </div>
     <a href="{% url 'centroComercial' %}" class="btn-details">VOLVER A LA PAGINA PRINCIPAL</a>
     

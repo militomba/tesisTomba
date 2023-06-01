@@ -27,6 +27,7 @@
             padding: 20px;
             border-radius: 5px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            position:relative;
         }
 
         .details-container h2 {
@@ -54,12 +55,10 @@
             background-color: #0056b3;
             color: #fff;
         }
-
         .btn-details-eliminar {
             position: absolute;
-            top: 60%;
-            right: 35px;
-            transform: translateY(-50%);
+            bottom: 0;
+            right: 0;
             text-decoration: none;
             color: #fff;
             background-color: #ff0000;
@@ -115,7 +114,12 @@
         <p><strong>STATUS:</strong> {{ status }}</p>
         <p><strong>NIVEL:</strong> {{ nivel }}</p>
         <a href="{% url 'eliminarLugar' lugar %}" class="btn-details-eliminar">ELIMINAR</a>
-
+        <p><strong>CODIGO QR:</p>
+            {% if qr_vacio %}
+            <p>No hay código QR disponible para este lugar.</p>
+        {% else %}
+            <img src="{{ qr.url }}" alt="Código QR">
+        {% endif %}
     </div>
     <a href="{% url 'listLugares' centroComercial%}" class="btn-details">VOLVER</a>
 

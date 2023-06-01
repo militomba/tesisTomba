@@ -43,19 +43,20 @@ class CentroComercialEspecifico(models.Model):
     #     self.nombre = self.nombre.upper()
     #     super().save(*args, **kwargs)
 class Lugar(models.Model):
-    lugar = models.CharField(max_length=30, unique=True)
+    lugar = models.CharField(max_length=30)
     status = models.BooleanField(default=True)
     nivel =  models.IntegerField(default=0)
     id_cc = models.ForeignKey(CentroComercialEspecifico, on_delete=models.CASCADE, null=False, related_name='lugares_cc')
     codigo_qr = models.ImageField(upload_to='qr_code', null=True, blank=True)
-    
+    codigo_qr_expiracion = models.DateTimeField(null=True, blank=True)
+
     def __str__(self):
         lugar = self.lugar
         cc = self.id_cc.nombre
         status = self.status
         return (cc + " - Lugar: "+ lugar +" - Status: " + str(status))
     
-
+    
 
 
 class LugarOcupado(models.Model):
