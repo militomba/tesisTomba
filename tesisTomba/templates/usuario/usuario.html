@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Listado de Centros Comerciales</title>
+    <title>Listado usuarios</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -72,12 +72,16 @@
 </head>
 <body>
     <h1>
-        ADMINISTARDOR CENTROS COMERCIALES
+        USUARIOS:
     </h1>
-    <p>Seleccione una opción:</p>
+    
     <ul>
-        <li><a href="{% url 'estacionamiento:centroComercial' %}">Administrar Centros Comerciales</a></li>
-        <li><a href="{% url 'usuario' %}">Administrar Usuarios</a></li>
+        {% for usuario in usuario %}
+            <li>
+                <h2>{{ usuario.nombre }}</h2>
+                <a href="{% url 'detalleUsuario' usuario.id %}" class="btn-details">Ver detalles</a>
+            </li>
+        {% endfor %}
     </ul>
 </body>
 </html>

@@ -1,9 +1,10 @@
+from django.http import HttpResponse
 from django.shortcuts import render
 from rest_framework import viewsets
 from .models import *
 from django.contrib.auth.models import Group, Permission
 from django.contrib.auth import authenticate, login, logout
-from django.shortcuts import render, redirect
+from django.shortcuts import render, get_object_or_404, redirect
 from estacionamiento.models import *
 from django.contrib.auth.models import User
 
@@ -47,7 +48,7 @@ class Usuarios(viewsets.ViewSet):
                 if tipo_usuario == 'Administrador':
                     return redirect('administrador')  # Redirigir a la página del administrador
                 elif tipo_usuario == 'Centro Comercial':
-                    return redirect('ruta_centro_comercial')  # Redirigir a la página del centro comercial
+                    return redirect('detalle_centro', datos_usuario.nombre)  # Redirigir a la página del centro comercial
                 elif tipo_usuario == 'Scanner QR':
                     return redirect('ruta_scanner_qr')  # Redirigir a la página del scanner QR # Redirigir a la página de inicio
             else:
@@ -61,6 +62,32 @@ class Usuarios(viewsets.ViewSet):
     
     def administrador(request):
         return render(request, 'admin.html')
+    
+    def listUsuario(request):
+        usuario = DatosUsuarios.objects.all()
+        return render(request, 'usuario.html', {'usuario':usuario})
+    
+    def detalleUsuario(request, usuarioID):
+        usuario = get_object_or_404(DatosUsuarios, id=usuarioID)
+        cc_vacio=False
+        if not usuario.centroComercial:
+            cc_vacio=True
+        return render (request, 'detalleUsuario.html', {'usuario':usuario, 'cc_vacio':cc_vacio})
+
+    def agregarCentroComercial(request, usuarioID):
+        cc = CentroComercialEspecifico.objects.all()
+        usuario = get_object_or_404(DatosUsuarios, id=usuarioID)
+        
+        if request.method == 'POST':
+            centroComercial = request.POST.get('centroComercial')
+            centro = get_object_or_404(CentroComercialEspecifico, id=centroComercial)
+            
+            usuario.centroComercial = centro
+            usuario.save()
+            return redirect('detalleUsuario', usuarioID)
+        
+        return render(request, 'agregarCentroComercial.html', {'cc': cc, 'usuario': usuario})
+
 
         
     

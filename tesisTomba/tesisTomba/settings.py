@@ -83,7 +83,7 @@ WSGI_APPLICATION = 'tesisTomba.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': "estacionamientodb",
+        'NAME': "estacionamientotesis",
         'USER': "miliprueba",
         'PASSWORD': "1234",
         'HOST': "localhost",

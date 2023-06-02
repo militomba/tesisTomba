@@ -28,7 +28,7 @@ class DatosUsuarios(models.Model):
     email = models.CharField(max_length=100)
     password = models.CharField(max_length=128, default=True)
     tipoUsuario= models.ForeignKey(TipoUsuarios, on_delete=models.CASCADE, null=False, default=True)
-    centroComercial=models.ForeignKey(CentroComercialEspecifico, on_delete=models.CASCADE, null=False, default=True)
+    centroComercial=models.ForeignKey(CentroComercialEspecifico, on_delete=models.CASCADE, null=True, blank=True, default=True)
     
     def __str__(self):
         return self.usuario
