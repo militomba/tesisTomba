@@ -78,7 +78,7 @@
         {% csrf_token %}
         <button class="btn-details-eliminar" type="submit" >ELIMINAR</button>
         
-        <button type="buttom" class= "btn-details-cancelar"formaction="{% url 'detalle_centro' centroComercial.nombre   %}">CANCELAR</button>
+        <button type="buttom" class= "btn-details-cancelar"formaction="{% url 'estacionamiento:detalle_centro' centroComercial.nombre   %}">CANCELAR</button>
     </form>
 </body>
 </html>

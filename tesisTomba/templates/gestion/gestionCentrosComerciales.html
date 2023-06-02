@@ -74,12 +74,12 @@
     <h1>
         Listado de Centros Comerciales
     </h1>
-    <a href="{% url 'crearCentroComercial' %}" class="btn-add">Agregar Centro Comercial</a>
+    <a href="{% url 'estacionamiento:crearCentroComercial' %}" class="btn-add">Agregar Centro Comercial</a>
     <ul>
         {% for centro in cc %}
             <li>
                 <h2>{{ centro.nombre }}</h2>
-                <a href="{% url 'detalle_centro' centro.nombre %}" class="btn-details">Ver detalles</a>
+                <a href="{% url 'estacionamiento:detalle_centro' centro.nombre %}" class="btn-details">Ver detalles</a>
             </li>
         {% endfor %}
     </ul>

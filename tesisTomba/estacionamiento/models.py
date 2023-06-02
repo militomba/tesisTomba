@@ -8,6 +8,7 @@ from PIL import Image
 from django.core.exceptions import ValidationError
 
 
+
 class CentroComercialEspecifico(models.Model):
     nombre = models.CharField(max_length=200, unique=True)
     cantidadLugares = models.IntegerField(default=0)

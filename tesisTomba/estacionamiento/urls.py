@@ -1,6 +1,7 @@
 from django.urls import path, include
 from .views import *
 
+app_name = 'estacionamiento'
 urlpatterns = [
     path('funcion/', include([
     #path('asignar_lugar/', asignar_lugar_view, name='asignar_lugar'),

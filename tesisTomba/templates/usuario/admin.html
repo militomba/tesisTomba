@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Listado de Lugares</title>
+    <title>Listado de Centros Comerciales</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -55,66 +55,29 @@
 
         .btn-add {
             text-decoration: none;
-            top: 7%;
-            right: 20px;
             color: #333;
             background-color: #e7e7e7;
             padding: 8px 16px;
             border-radius: 4px;
             font-weight: bold;
             float: right;
-            margin-top: -50px;
+            margin-top: -60px;
         }
 
         .btn-add:hover {
             background-color: #0056b3;
             color: #fff;
         }
-        .btn-details-volver {
-            position: absolute;
-            top: 3%;
-            left: 20px;
-            transform: translateY(-50%);
-            text-decoration: none;
-            color: #333;
-            background-color: #e7e7e7;
-            padding: 6px 12px;
-            border-radius: px;
-            font-weight: bold;
-        }
-
-        .btn-details-volver:hover {
-            background-color: #0056b3;
-            color: #fff;
-        }
-        .boton-final {
-            margin-top: 20px;
-            text-align: right;
-          }
     </style>
 </head>
 <body>
-    
     <h1>
-       CENTRO COMERCIAL {{centroComecial.nombre}}
+        ADMINISTARDOR CENTROS COMERCIALES
     </h1>
-   
-    <h2>
-        LISTADO DE LUGARES:
-     </h2>
-    {% comment %} <a href="{% url 'estacionamiento:detalle_centro' centroComecial.nombre %}" class="btn-details-volver">VOLVER </a> {% endcomment %}
-     
-   
-    <a href="{% url 'estacionamiento:crearLugar' centroComecial.id%}" class="btn-add">Agregar Lugar</a>    
-
+    <p>Seleccione una opción:</p>
     <ul>
-        {% for lugar in lugar %}
-            <li>
-                <h2>LUGAR: {{ lugar.lugar }}</h2>
-                <a href="{% url 'estacionamiento:detalleLugar' lugar.lugar  centroComecial.id%}" class="btn-details">Ver detalles</a>
-                
-            </li>
-        {% endfor %}
+        <li><a href="{% url 'estacionamiento:centroComercial' %}">Administrar Centros Comerciales</a></li>
+        {% comment %} <li><a href="{% url '' %}">Administrar Usuarios</a></li> {% endcomment %}
     </ul>
 </body>
 </html>

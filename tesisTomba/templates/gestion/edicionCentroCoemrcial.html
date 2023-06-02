@@ -116,7 +116,7 @@
 <body>
     <h1>EDITAR CENTRO COMERCIAL: {{nombre}}</h1>
 
-    <form method="post" action="{% url 'edicionCentro' nombre%}">{% csrf_token%}
+    <form method="post" action="{% url 'estacionamiento:edicionCentro' nombre%}">{% csrf_token%}
         
   <div class="form-group">
     <label for="nombre">Nombre del centro comercial:</label>
@@ -140,4 +140,4 @@
   <div id="imagen">
   </div>
   <button type="submit" class= "btn-details-act">GUARDAR</button>
-  <button type="buttom" class= "btn-details-volver"formaction="{% url 'detalle_centro' nombre  %}">CANCELAR</button>
+  <button type="buttom" class= "btn-details-volver"formaction="{% url 'estacionamiento:detalle_centro' nombre  %}">CANCELAR</button>

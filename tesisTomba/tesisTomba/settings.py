@@ -39,6 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'estacionamiento',
+    'usuarios',
+    'rest_framework',
+    'rest_framework_simplejwt'
 ]
 
 MIDDLEWARE = [
@@ -57,7 +60,8 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS':  [os.path.join(BASE_DIR, 'templates/gestion'),
-                  os.path.join(BASE_DIR, 'templates/funcion')],
+                  os.path.join(BASE_DIR, 'templates/funcion'),
+                  os.path.join(BASE_DIR, 'templates/usuario')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -79,13 +83,18 @@ WSGI_APPLICATION = 'tesisTomba.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': "estacionamiento",
+        'NAME': "estacionamientodb",
         'USER': "miliprueba",
         'PASSWORD': "1234",
         'HOST': "localhost",
     }
 }
 
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ],
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators

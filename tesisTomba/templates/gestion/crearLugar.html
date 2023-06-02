@@ -77,7 +77,7 @@
     <h1>Crear Lugar</h1>
 
 
-        <form method="post" enctype="multipart/form-data"action="{% url 'crearLugar' cc.id%}">{% csrf_token%}
+        <form method="post" enctype="multipart/form-data"action="{% url 'estacionamiento:crearLugar' cc.id%}">{% csrf_token%}
             {% csrf_token %}
 
             <div>
