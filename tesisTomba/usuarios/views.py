@@ -48,7 +48,7 @@ class Usuarios(viewsets.ViewSet):
                 if tipo_usuario == 'Administrador':
                     return redirect('administrador')  # Redirigir a la página del administrador
                 elif tipo_usuario == 'Centro Comercial':
-                    return redirect('detalle_centro', datos_usuario.nombre)  # Redirigir a la página del centro comercial
+                    return redirect('estacionamiento:listLugares', datos_usuario.centroComercial.nombre)  # Redirigir a la página del centro comercial
                 elif tipo_usuario == 'Scanner QR':
                     return redirect('ruta_scanner_qr')  # Redirigir a la página del scanner QR # Redirigir a la página de inicio
             else:
@@ -60,11 +60,14 @@ class Usuarios(viewsets.ViewSet):
         logout(request)
         return redirect('login')
     
+
+    #ADMINISTRADOR
     def administrador(request):
         return render(request, 'admin.html')
     
     def listUsuario(request):
         usuario = DatosUsuarios.objects.all()
+        
         return render(request, 'usuario.html', {'usuario':usuario})
     
     def detalleUsuario(request, usuarioID):
@@ -89,6 +92,7 @@ class Usuarios(viewsets.ViewSet):
         return render(request, 'agregarCentroComercial.html', {'cc': cc, 'usuario': usuario})
 
 
+    #USUARIOS CENTROS COMERCIALES
         
     
     

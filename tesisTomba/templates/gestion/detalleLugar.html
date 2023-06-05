@@ -113,7 +113,7 @@
     <div class="details-container">
         <p><strong>STATUS:</strong> {{ status }}</p>
         <p><strong>NIVEL:</strong> {{ nivel }}</p>
-        <a href="{% url 'eliminarLugar' lugar %}" class="btn-details-eliminar">ELIMINAR</a>
+        <a href="{% url 'estacionamiento:eliminarLugar' lugar %}" class="btn-details-eliminar">ELIMINAR</a>
         <p><strong>CODIGO QR:</p>
             {% if qr_vacio %}
             <p>No hay código QR disponible para este lugar.</p>

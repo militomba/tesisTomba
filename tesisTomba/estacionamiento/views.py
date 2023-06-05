@@ -65,7 +65,7 @@ class CentrosComercialesViews(viewsets.ViewSet):
         centroComercial=CentroComercialEspecifico.objects.get(nombre=nombre)
         if request.method == 'POST':
             centroComercial.delete()
-            return redirect('centroComercial') 
+            return redirect('estacionamiento:centroComercial') 
         return render(request, 'eliminarCentroComercial.html', {'centroComercial':centroComercial})
 
     def edicionCentroComercial(request, nombre):
@@ -95,7 +95,7 @@ class CentrosComercialesViews(viewsets.ViewSet):
                 cc.crear_centro_comercial()
                 cc.save()
 
-            return redirect('detalle_centro', cc.nombre)
+            return redirect('estacionamiento:detalle_centro', cc.nombre)
 
         return render(request, "edicionCentroCoemrcial.html", {'id':id,'nombre': cc.nombre,'cantLugares': cc.cantidadLugares,'niveles':cc.niveles ,'imagen': cc.imagen.url, 'contenido':cc.contenido})
 
@@ -127,7 +127,7 @@ class LugaresViews(viewsets.ViewSet):
         cc = lugar.id_cc.nombre
         if request.method == 'POST':
             lugar.delete()
-            return redirect('listLugares/', cc) 
+            return redirect('estacionamiento:listLugares', cc) 
         return render(request, 'eliminarLugar.html', {'lugar':lugar})
                 
     
@@ -153,7 +153,7 @@ class LugaresViews(viewsets.ViewSet):
                             codigo_qr=codigo_qr)
             
             lugarNuevo.save()
-            return redirect('listLugares', centroComercial.nombre )
+            return redirect('estacionamiento:listLugares', centroComercial.nombre )
             #return render(request, 'crearLugar.html', {'lugar':lugarNuevo, 'cc':centroComercial})
             
                 
