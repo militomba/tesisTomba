@@ -32,6 +32,10 @@ class DatosUsuarios(models.Model):
     
     def __str__(self):
         return self.usuario
+    
+class Scanner(DatosUsuarios):
+    token = models.CharField(max_length=500)
+
 
 
     

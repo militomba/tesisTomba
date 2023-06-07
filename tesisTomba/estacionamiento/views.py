@@ -15,9 +15,10 @@ from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.http import HttpResponse
 from django.db import IntegrityError
 import jwt
-import json
+from jwt.exceptions import InvalidTokenError
 from datetime import datetime, timedelta
 from django.core import serializers
+from django.contrib.auth.decorators import login_required
 
 class CentrosComercialesViews(viewsets.ViewSet):
     def listCentroComercial(request):
@@ -119,7 +120,7 @@ class LugaresViews(viewsets.ViewSet):
         qr_vacio = False
         if not detalleLugar.codigo_qr:
             qr_vacio = True
-        return render(request, 'detalleLugar.html', {'lugar': detalleLugar.lugar, 'status':status, 'nivel':detalleLugar.nivel, 'centroComercial':centroComercial, 'qr':qr, 'qr_vacio': qr_vacio})
+        return render(request, 'detalleLugar.html', {'lugar': detalleLugar.lugar, 'status':status, 'nivel':detalleLugar.nivel, 'centroComercial':centroComercial, 'qr':qr, 'qr_vacio': qr_vacio, 'id_cc':detalleLugar.id_cc})
     
 
     def eliminarLugar(request, lugar):
@@ -156,9 +157,34 @@ class LugaresViews(viewsets.ViewSet):
             return redirect('estacionamiento:listLugares', centroComercial.nombre )
             #return render(request, 'crearLugar.html', {'lugar':lugarNuevo, 'cc':centroComercial})
             
+            
+        return render(request, 'crearLugar.html', {'cc':centroComercial})
+    
+    def editarLugar(request, nombreCC, lugar):
+        l= Lugar.objects.get(lugar=lugar)
+        cc =CentroComercialEspecifico.objects.get(nombre=nombreCC)
+        if request.method == 'POST':
+            lugar = request.POST.get('lugar')
+            nivel = int(request.POST.get('nivel'))
+            status = request.POST.get('status')
+            id_cc = request.POST.get('id_cc')
+
+            if(lugar != l.lugar or
+               nivel != l.nivel or
+               status != l.status):
+                
+                l.lugar=lugar
+                l.nivel=nivel
+                l.status=status
+                l.id_cc=cc
+
+                l.save()
+
+            return redirect('estacionamiento:detalleLugar', lugar=l.lugar, id_cc=cc.id)
+        
+        return render(request, 'editarLugar.html', {'lugar':l, 'cc':cc})
                 
 
-        return render(request, 'crearLugar.html', {'cc':centroComercial})
 
 
 class Funciones(viewsets.ViewSet):
@@ -166,6 +192,7 @@ class Funciones(viewsets.ViewSet):
         lugarAsignado = Lugar.objects.filter(status=True).first()
         
         if lugarAsignado is None:
+            #hacer funcion para verificar si hay alguno expirado y asignar ese
             return None
         
         lugarAsignado.status = False
@@ -180,12 +207,20 @@ class Funciones(viewsets.ViewSet):
         
         centroComercial = lugarAsignado.id_cc.nombre
         
+        var = lugarOcupado.lugar
+        print(type(var))
+        
+        archico_jwt={
+            'lugar':lugarOcupado.lugar.lugar,
+            'exp': datetime.utcnow() + timedelta(hours=24)
+        }
 
-        #generar 
+        token = jwt.encode(archico_jwt, 'Alaska.1234', algorithm='HS256')
+        
 
         #generar codigo QR
         qr = qrcode.QRCode(version=1, box_size=10, border=5)
-        qr.add_data('http://192.168.54.175:8081/funcion/liberarLugar/'+str(lugarAsignado.lugar)+'/')
+        qr.add_data('http://192.168.54.175:8081/funcion/liberarLugar/'+str(lugarAsignado.lugar)+'/?token=' + token)
         qr.make(fit=True)
         img = qr.make_image(fill='black', back_color='white')
 
@@ -196,7 +231,6 @@ class Funciones(viewsets.ViewSet):
         qr_file = InMemoryUploadedFile(buffer, None, lugarAsignado.lugar+centroComercial+'.png', 'img/png', buffer.getbuffer().nbytes, None)
         # lugarAsignado.codigo_qr.save(f'{lugarAsignado.lugar}.png',ContentFile(buffer.getvalue()),save=False)
         lugarAsignado.codigo_qr.save(lugarAsignado.lugar+centroComercial+'.png', qr_file, save=True)
-        lugarAsignado.codigo_qr_expiracion = datetime.now() + timedelta(hours=24)  # Establecer expiración de 24 horas
         lugarAsignado.save()
 
         imagen = lugarAsignado.codigo_qr.url
@@ -213,25 +247,38 @@ class Funciones(viewsets.ViewSet):
         
         return info
 
+    
 
+    @login_required
     def liberarLugar(request, lugar):
-        lugarAsignado = Lugar.objects.filter(lugar=lugar).first()
+        user=request.user
+        #request.token
+        print('-------------------')
+        print(user)
+        print('-------------------')
+        token = request.GET.get('token')
 
-        if lugarAsignado is None:
-            return HttpResponse("El lugar no fue encontrado")
-        lugarAsignado.status = True
-        lugarAsignado.save()
+        try:
+            #payload = jwt.decode(token, 'user.data.token', algorithms=['HS256'])
+            payload = jwt.decode(token, 'Alaska.1234', algorithms=['HS256'])
+            lugarAsignado = Lugar.objects.filter(lugar=lugar).first()
 
-        lugarOcupado = LugarOcupado.objects.filter(lugar=lugarAsignado).last()
-        lugarOcupado.delete()
+            if lugarAsignado is None:
+                return HttpResponse("El lugar no fue encontrado")
+            lugarAsignado.status = True
+            lugarAsignado.save()
 
-        lugarAsignado.codigo_qr.delete()
-        context ={
-            'lugar':lugarAsignado.lugar
-        }
-        return render(request, 'liberarLugar.html', context)
-        #return HttpResponse('Lugar '+str(lugarAsignado.lugar)+' liberado exitosamente')
-        
+            lugarOcupado = LugarOcupado.objects.filter(lugar=lugarAsignado).last()
+            lugarOcupado.delete()
+
+            lugarAsignado.codigo_qr.delete()
+            context ={
+                'lugar':lugarAsignado.lugar
+            }
+            return render(request, 'liberarLugar.html', context)
+            #return HttpResponse('Lugar '+str(lugarAsignado.lugar)+' liberado exitosamente')
+        except InvalidTokenError:
+            return HttpResponse("Token inválido")
 
     def detalleLugar(request):
         infoLugar = Funciones.asignarLugar()

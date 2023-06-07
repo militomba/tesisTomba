@@ -49,7 +49,6 @@ class Lugar(models.Model):
     nivel =  models.IntegerField(default=0)
     id_cc = models.ForeignKey(CentroComercialEspecifico, on_delete=models.CASCADE, null=False, related_name='lugares_cc')
     codigo_qr = models.ImageField(upload_to='qr_code', null=True, blank=True)
-    codigo_qr_expiracion = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
         lugar = self.lugar

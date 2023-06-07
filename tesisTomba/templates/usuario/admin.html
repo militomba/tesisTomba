@@ -16,7 +16,7 @@
             align-items: center;
         }
 
-        ul {
+        {% comment %} ul {
             list-style-type: none;
             padding: 0;
             margin: 0;
@@ -33,12 +33,29 @@
 
         li:hover {
             background-color: #f9f9f9;
-        }
+        } {% endcomment %}
 
-        .btn-details {
+        .btn-details-cc{
             position: absolute;
             top: 50%;
-            right: 20px;
+            left: 20px;
+            transform: translateY(-50%);
+            text-decoration: none;
+            color: #333;
+            background-color: #e7e7e7;
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        .btn-details:hover {
+            background-color: #0056b3;
+            color: #fff;
+        }
+        .btn-details{
+            position: absolute;
+            top: 50%;
+            left: 20px;
             transform: translateY(-50%);
             text-decoration: none;
             color: #333;
@@ -68,16 +85,52 @@
             background-color: #0056b3;
             color: #fff;
         }
+        .square-button {
+            display: inline-block;
+            padding: 10px 20px;
+            border: none;
+            background-color:  #e7e7e7;
+            color: #333;
+            font-size: 16px;
+            text-align: center;
+            transition: background-color 0.3s;
+            text-decoration: none;
+            
+          }
+          
+          .square-button:hover {
+            background-color: #333;
+          }
+          
+          .square-button:focus {
+            outline: none;
+          }
+          .btn-details {
+            position: absolute;
+            top: 50%;
+            right: 20px;
+            transform: translateY(-50%);
+            text-decoration: none;
+            color: #333;
+            background-color: #e7e7e7;
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        .btn-details:hover {
+            background-color: #0056b3;
+            color: #fff;
+        }
     </style>
 </head>
 <body>
     <h1>
-        ADMINISTARDOR CENTROS COMERCIALES
+        ADMINISTARDOR:
     </h1>
-    <p>Seleccione una opción:</p>
-    <ul>
-        <li><a href="{% url 'estacionamiento:centroComercial' %}">Administrar Centros Comerciales</a></li>
-        <li><a href="{% url 'usuario' %}">Administrar Usuarios</a></li>
-    </ul>
+    <h2>Seleccione una opción:</h2>
+        <a href="{% url 'estacionamiento:centroComercial' %}"  class="square-button">Administrar Centros Comerciales</a>
+        <a href="{% url 'usuarios:usuario' %}" class="square-button">Administrar Usuarios</a>
+   
 </body>
 </html>

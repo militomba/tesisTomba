@@ -52,6 +52,23 @@
             background-color: #0056b3;
             color: #fff;
         }
+        .btn-details-volver {
+            position: absolute;
+            top: 3%;
+            right: 20px;
+            transform: translateY(-50%);
+            text-decoration: none;
+            color: #333;
+            background-color: #e7e7e7;
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        .btn-details-volver:hover {
+            background-color: #0056b3;
+            color: #fff;
+        }
 
         .btn-add {
             text-decoration: none;
@@ -74,7 +91,7 @@
     <h1>
         Listado de Centros Comerciales
     </h1>
-    <a href="{% url 'estacionamiento:crearCentroComercial' %}" class="btn-add">Agregar Centro Comercial</a>
+    <a href="{% url 'estacionamiento:crearCentroComercial' %}" class="btn-add">Agregar</a>
     <ul>
         {% for centro in cc %}
             <li>
@@ -83,6 +100,7 @@
             </li>
         {% endfor %}
     </ul>
+    <a href="{% url 'usuarios:administrador'%}" class="btn-details-volver">VOLVER</a>
 </body>
 </html>
 

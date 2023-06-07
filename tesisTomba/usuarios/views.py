@@ -24,12 +24,17 @@ class Usuarios(viewsets.ViewSet):
             tipoUsuario = request.POST['tipo_usuario']
             # Crear un nuevo usuario en la base de datos
             
-            
+
+            user = User.objects.create_user(username=username, password=password, email=email)
+
             tipo_usuario = TipoUsuarios.objects.get(id=tipoUsuario)
-            # Crear una instancia de DatosUsuarios relacionada con el nuevo usuario
-            datos_usuario = DatosUsuarios(usuario=username, nombre=nombre, apellido=apellido, email=email, password=password, tipoUsuario=tipo_usuario)
+            
+            if tipoUsuario=='3':
+                datos_usuario=Scanner(usuario=username, nombre=nombre, apellido=apellido, email=email, password=password, tipoUsuario=tipo_usuario, token='Alaska.1234')
+            else:
+                datos_usuario = DatosUsuarios(usuario=username, nombre=nombre, apellido=apellido, email=email, password=password, tipoUsuario=tipo_usuario)
             datos_usuario.save()
-            return redirect('login')
+            return redirect('usuarios:login')
         
         tipoUsuarios = TipoUsuarios.objects.all()
         return render(request, 'register.html', {'tipoUsuario': tipoUsuarios})
@@ -46,11 +51,11 @@ class Usuarios(viewsets.ViewSet):
                 datos_usuario = DatosUsuarios.objects.get(usuario=username)
                 tipo_usuario = datos_usuario.tipoUsuario.tipo_usuario
                 if tipo_usuario == 'Administrador':
-                    return redirect('administrador')  # Redirigir a la página del administrador
+                    return redirect('usuarios:administrador')  # Redirigir a la página del administrador
                 elif tipo_usuario == 'Centro Comercial':
                     return redirect('estacionamiento:listLugares', datos_usuario.centroComercial.nombre)  # Redirigir a la página del centro comercial
                 elif tipo_usuario == 'Scanner QR':
-                    return redirect('ruta_scanner_qr')  # Redirigir a la página del scanner QR # Redirigir a la página de inicio
+                    return redirect('usuarios:scanner', datos_usuario.id)  # Redirigir a la página del scanner QR # Redirigir a la página de inicio
             else:
                 # Usuario no válido
                 return render(request, 'login.html', {'error': 'Usuario o contraseña incorrectos'})
@@ -87,9 +92,16 @@ class Usuarios(viewsets.ViewSet):
             
             usuario.centroComercial = centro
             usuario.save()
-            return redirect('detalleUsuario', usuarioID)
+            return redirect('usuarios:detalleUsuario', usuarioID)
         
         return render(request, 'agregarCentroComercial.html', {'cc': cc, 'usuario': usuario})
+    
+    def scanner(request, usuarioID):
+        usuario = DatosUsuarios.objects.get(id=usuarioID)
+        user=usuario.usuario
+        cc = usuario.centroComercial.nombre
+        return render(request, 'scanner.html', {'cc':cc, 'usuario':user})
+
 
 
     #USUARIOS CENTROS COMERCIALES

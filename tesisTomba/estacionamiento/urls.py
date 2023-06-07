@@ -17,9 +17,10 @@ urlpatterns = [
     path('edicionCentro/<str:nombre>/', CentrosComercialesViews.edicionCentroComercial, name='edicionCentro'),
     #lugares
     path('lugares/<str:nombreCC>/', LugaresViews.listLugares, name='listLugares'),
-    path('detalleLugar/<str:lugar>/<int:id_cc>', LugaresViews.detalleLugar, name='detalleLugar'),
+    path('detalleLugar/<str:lugar>/<int:id_cc>/', LugaresViews.detalleLugar, name='detalleLugar'),
     path('crearLugar/<int:id_cc>', LugaresViews.crearLugar, name='crearLugar'),
     path('eliminarLugar/<str:lugar>', LugaresViews.eliminarLugar, name='eliminarLugar'),
+    path('editarLugar/<str:nombreCC>/<str:lugar>', LugaresViews.editarLugar, name='editarLugar'),
 
 
 

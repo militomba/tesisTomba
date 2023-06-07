@@ -75,7 +75,8 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'tesisTomba.wsgi.application'
-
+LOGIN_URL='/login/'
+STATIC_URL = '/static/'
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
@@ -83,7 +84,7 @@ WSGI_APPLICATION = 'tesisTomba.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': "estacionamientotesis",
+        'NAME': "tesis2",
         'USER': "miliprueba",
         'PASSWORD': "1234",
         'HOST': "localhost",

@@ -134,7 +134,7 @@
         <p><strong>email:</strong> {{ usuario.email }}</p>
         <p><strong>Tipo Usuario:</strong> {{ usuario.tipoUsuario}}</p>
         {%if cc_vacio%}
-        <a href="{% url 'agregarCentro' usuario.id%}" class="btn-details-editar">AGREGAR CENTRO COMERCIAL</a>
+        <a href="{% url 'usuarios:agregarCentro' usuario.id%}" class="btn-details-editar">AGREGAR CENTRO COMERCIAL</a>
         {%else%}
         <p><strong>Centro Comercial:</strong> {{ usuario.centroComercial}}</p>
         {% endif %}
@@ -142,7 +142,7 @@
         <a href="{% url 'estacionamiento:edicionCentro' nombre %}" class="btn-details-editar">EDITAR</a>
         <a href="{% url 'estacionamiento:listLugares' nombre  %}" class="btn-details-lugar">LUGARES</a> {% endcomment %}
     </div>
-    <a href="{% url 'usuario' %}" class="btn-details">VOLVER</a>
+    <a href="{% url 'usuarios:usuario' %}" class="btn-details">VOLVER</a>
     
 </body>
 </html>

@@ -70,10 +70,11 @@
         .btn-details-eliminar:hover {
             background-color: #cc0000;
         }
+
         .btn-details-editar {
             position: absolute;
-            top: 60%;
-            right: 150px;
+            top: 91%;
+            right: 120px;
             transform: translateY(-50%);
             text-decoration: none;
             color: #fff;
@@ -114,6 +115,7 @@
         <p><strong>STATUS:</strong> {{ status }}</p>
         <p><strong>NIVEL:</strong> {{ nivel }}</p>
         <a href="{% url 'estacionamiento:eliminarLugar' lugar %}" class="btn-details-eliminar">ELIMINAR</a>
+        <a href="{% url 'estacionamiento:editarLugar' centroComercial  lugar %}" class="btn-details-editar">EDITAR</a>
         <p><strong>CODIGO QR:</p>
             {% if qr_vacio %}
             <p>No hay código QR disponible para este lugar.</p>
@@ -122,8 +124,5 @@
         {% endif %}
     </div>
     <a href="{% url 'estacionamiento:listLugares' centroComercial%}" class="btn-details">VOLVER</a>
-
-    
-    
 </body>
 </html>
