@@ -55,7 +55,7 @@
         .btn-details-volver {
             position: absolute;
             top: 3%;
-            right: 20px;
+            left: 20px;
             transform: translateY(-50%);
             text-decoration: none;
             color: #333;
@@ -78,10 +78,27 @@
             border-radius: 4px;
             font-weight: bold;
             float: right;
-            margin-top: -60px;
+            margin-top: -50px;
         }
 
         .btn-add:hover {
+            background-color: #0056b3;
+            color: #fff;
+        }
+        .btn-details-logout {
+            position: absolute;
+            top: 3%;
+            right: 20px;
+            transform: translateY(-50%);
+            text-decoration: none;
+            color: #333;
+            background-color: #e7e7e7;
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        .btn-details-logout:hover {
             background-color: #0056b3;
             color: #fff;
         }
@@ -100,6 +117,8 @@
             </li>
         {% endfor %}
     </ul>
+    {% comment %} <a href="{% url 'usuarios:logout' %}" class="btn-details-logout">Cerrar Sesión</a> {% endcomment %}
+
     <a href="{% url 'usuarios:administrador'%}" class="btn-details-volver">VOLVER</a>
 </body>
 </html>

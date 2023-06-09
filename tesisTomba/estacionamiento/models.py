@@ -26,7 +26,7 @@ class CentroComercialEspecifico(models.Model):
         # contenido = self.contenido
          # Crear el código QR
         qr = qrcode.QRCode(version=1, box_size=10, border=5)
-        qr.add_data('https://192.168.54.175:8081/funcion/detalleLugarAsignado/')
+        qr.add_data('https://192.168.54.175:8081/funcion/detalleLugarAsignado/'+self.nombre+'/')
         qr.make(fit=True)
         # Generar la imagen del código QR
         img = qr.make_image(fill='black', back_color='white')

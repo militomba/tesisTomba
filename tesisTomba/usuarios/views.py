@@ -63,7 +63,7 @@ class Usuarios(viewsets.ViewSet):
 
     def user_logout(request):
         logout(request)
-        return redirect('login')
+        return redirect('usuarios:login')
     
 
     #ADMINISTRADOR

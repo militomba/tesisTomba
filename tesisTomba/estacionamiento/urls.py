@@ -5,7 +5,7 @@ app_name = 'estacionamiento'
 urlpatterns = [
     path('funcion/', include([
     #path('asignar_lugar/', asignar_lugar_view, name='asignar_lugar'),
-    path('detalleLugarAsignado/', Funciones.detalleLugar, name='detalleLugar'),
+    path('detalleLugarAsignado/<str:cc>/', Funciones.detalleLugar, name='detalleLugar'),
     path('liberarLugar/<str:lugar>/', Funciones.liberarLugar, name='liberarLugar'),
     path('cc/<str:nombre>/', Funciones.centroComercial, name='cc'),
     ])),

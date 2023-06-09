@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -16,24 +17,7 @@
             align-items: center;
         }
 
-        {% comment %} ul {
-            list-style-type: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        li {
-            background-color: #fff;
-            margin-bottom: 10px;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-            position: relative;
-        }
-
-        li:hover {
-            background-color: #f9f9f9;
-        } {% endcomment %}
+        
 
         .btn-details-cc{
             position: absolute;
@@ -99,7 +83,8 @@
           }
           
           .square-button:hover {
-            background-color: #333;
+            background-color: #0056b3;
+            color: #fff;
           }
           
           .square-button:focus {
@@ -122,15 +107,34 @@
             background-color: #0056b3;
             color: #fff;
         }
+        .btn-details-logout {
+            position: absolute;
+            top: 3%;
+            right: 20px;
+            transform: translateY(-50%);
+            text-decoration: none;
+            color: #333;
+            background-color: #e7e7e7;
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        .btn-details-logout:hover {
+            background-color: #0056b3;
+            color: #fff;
+        }
     </style>
 </head>
 <body>
+ 
     <h1>
         ADMINISTARDOR:
     </h1>
     <h2>Seleccione una opción:</h2>
         <a href="{% url 'estacionamiento:centroComercial' %}"  class="square-button">Administrar Centros Comerciales</a>
         <a href="{% url 'usuarios:usuario' %}" class="square-button">Administrar Usuarios</a>
-   
+        <a href="{% url 'usuarios:logout' %}" class="btn-details-logout">Cerrar Sesión</a>
+ 
 </body>
 </html>

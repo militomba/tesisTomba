@@ -188,8 +188,12 @@ class LugaresViews(viewsets.ViewSet):
 
 
 class Funciones(viewsets.ViewSet):
-    def asignarLugar():
-        lugarAsignado = Lugar.objects.filter(status=True).first()
+    def asignarLugar(cc):
+        centroComercial=CentroComercialEspecifico.objects.get(nombre=cc)
+        print('--------')
+        print(centroComercial)
+        print('--------')
+        lugarAsignado = Lugar.objects.filter(status=True, id_cc=centroComercial.id).first()
         
         if lugarAsignado is None:
             #hacer funcion para verificar si hay alguno expirado y asignar ese
@@ -276,8 +280,10 @@ class Funciones(viewsets.ViewSet):
         except InvalidTokenError:
             return HttpResponse("Token inválido")
 
-    def detalleLugar(request):
-        infoLugar = Funciones.asignarLugar()
+    def detalleLugar(request, cc):
+        cc = CentroComercialEspecifico.objects.get(nombre=cc)
+        
+        infoLugar = Funciones.asignarLugar(cc)
         
         if infoLugar:
             lugar = infoLugar['lugar']
