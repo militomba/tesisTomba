@@ -14,7 +14,7 @@ class CentroComercialEspecifico(models.Model):
     cantidadLugares = models.IntegerField(default=0)
     niveles = models.IntegerField(default=0)
     imagen = models.ImageField(upload_to='qr_Code', blank=True, null=True)
-    contenido = models.CharField(max_length=200)
+    # contenido = models.CharField(max_length=200)
 
     def __str__(self):
         return(self.nombre)
@@ -23,10 +23,10 @@ class CentroComercialEspecifico(models.Model):
     def crear_centro_comercial(self, *args, **kwargs):
         self.nombre = self.nombre.upper()
          # Generar el contenido del código QR
-        contenido = self.contenido
+        # contenido = self.contenido
          # Crear el código QR
         qr = qrcode.QRCode(version=1, box_size=10, border=5)
-        qr.add_data(contenido)
+        qr.add_data('https://192.168.54.175:8081/funcion/detalleLugarAsignado/')
         qr.make(fit=True)
         # Generar la imagen del código QR
         img = qr.make_image(fill='black', back_color='white')

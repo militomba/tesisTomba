@@ -36,7 +36,7 @@ class CentrosComercialesViews(viewsets.ViewSet):
             nombre = request.POST.get('nombre')
             cantidad_lugares = int(request.POST.get('cantidadLugares'))
             niveles = int(request.POST.get('niveles'))
-            contenido = request.POST.get('contenido')
+            # contenido = request.POST.get('contenido')
             imagen = request.FILES.get('imagen')
 
             try:
@@ -45,7 +45,7 @@ class CentrosComercialesViews(viewsets.ViewSet):
                     nombre=nombre,
                     cantidadLugares=cantidad_lugares,
                     niveles=niveles,
-                    contenido=contenido
+                    # contenido=contenido
                 )
 
                 if imagen:
@@ -75,20 +75,20 @@ class CentrosComercialesViews(viewsets.ViewSet):
             nombre = request.POST.get('nombre')
             cantidad_lugares = int(request.POST.get('cantidadLugares'))
             niveles = int(request.POST.get('niveles'))
-            contenido = request.POST.get('contenido')
+            # contenido = request.POST.get('contenido')
             imagen = request.FILES.get('imagen')
 
             if (nombre != cc.nombre or
                 cantidad_lugares != cc.cantidadLugares or
                 niveles != cc.niveles or
-                contenido != cc.contenido or
+                # contenido != cc.contenido or
                 imagen is not None):
             # Al menos uno de los datos es diferente, se procede a realizar la actualización
             
                 cc.nombre = nombre
                 cc.cantidadLugares=cantidad_lugares
                 cc.niveles = niveles
-                cc.contenido = contenido
+                # cc.contenido = contenido
 
                 if imagen:
                     cc.imagen=imagen
@@ -98,7 +98,7 @@ class CentrosComercialesViews(viewsets.ViewSet):
 
             return redirect('estacionamiento:detalle_centro', cc.nombre)
 
-        return render(request, "edicionCentroCoemrcial.html", {'id':id,'nombre': cc.nombre,'cantLugares': cc.cantidadLugares,'niveles':cc.niveles ,'imagen': cc.imagen.url, 'contenido':cc.contenido})
+        return render(request, "edicionCentroCoemrcial.html", {'id':id,'nombre': cc.nombre,'cantLugares': cc.cantidadLugares,'niveles':cc.niveles ,'imagen': cc.imagen.url})
 
 class LugaresViews(viewsets.ViewSet):
     def listLugares(request, nombreCC):
@@ -207,8 +207,7 @@ class Funciones(viewsets.ViewSet):
         
         centroComercial = lugarAsignado.id_cc.nombre
         
-        var = lugarOcupado.lugar
-        print(type(var))
+        
         
         archico_jwt={
             'lugar':lugarOcupado.lugar.lugar,
@@ -220,7 +219,7 @@ class Funciones(viewsets.ViewSet):
 
         #generar codigo QR
         qr = qrcode.QRCode(version=1, box_size=10, border=5)
-        qr.add_data('http://192.168.54.175:8081/funcion/liberarLugar/'+str(lugarAsignado.lugar)+'/?token=' + token)
+        qr.add_data('https://192.168.54.175:8081/funcion/liberarLugar/'+str(lugarAsignado.lugar)+'/?token=' + token)
         qr.make(fit=True)
         img = qr.make_image(fill='black', back_color='white')
 
@@ -252,10 +251,7 @@ class Funciones(viewsets.ViewSet):
     @login_required
     def liberarLugar(request, lugar):
         user=request.user
-        #request.token
-        print('-------------------')
-        print(user)
-        print('-------------------')
+       
         token = request.GET.get('token')
 
         try:

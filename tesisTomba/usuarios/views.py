@@ -30,9 +30,9 @@ class Usuarios(viewsets.ViewSet):
             tipo_usuario = TipoUsuarios.objects.get(id=tipoUsuario)
             
             if tipoUsuario=='3':
-                datos_usuario=Scanner(usuario=username, nombre=nombre, apellido=apellido, email=email, password=password, tipoUsuario=tipo_usuario, token='Alaska.1234')
+                datos_usuario=Scanner(usuario=username, nombre=nombre, apellido=apellido, email=email, password=password, tipoUsuario=tipo_usuario, token='Alaska.1234', centroComercial=None)
             else:
-                datos_usuario = DatosUsuarios(usuario=username, nombre=nombre, apellido=apellido, email=email, password=password, tipoUsuario=tipo_usuario)
+                datos_usuario = DatosUsuarios(usuario=username, nombre=nombre, apellido=apellido, email=email, password=password, tipoUsuario=tipo_usuario, centroComercial=None)
             datos_usuario.save()
             return redirect('usuarios:login')
         

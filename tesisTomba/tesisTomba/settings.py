@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'estacionamiento',
     'usuarios',
     'rest_framework',
-    'rest_framework_simplejwt'
+    'rest_framework_simplejwt',
+    "django_extensions",
 ]
 
 MIDDLEWARE = [
@@ -76,7 +77,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'tesisTomba.wsgi.application'
 LOGIN_URL='/login/'
-STATIC_URL = '/static/'
+
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
@@ -139,3 +140,8 @@ STATIC_URL = '/static/'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SESSION_COOKIE_SECURE = True
+
+RUNSERVERPLUS_SERVER_ADDRESS_PORT = '192.168.54.175:8081'

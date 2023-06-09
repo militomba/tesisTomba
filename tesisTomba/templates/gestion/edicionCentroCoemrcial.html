@@ -132,9 +132,9 @@
     <label for="niveles">Niveles:</label>
     <input type="number" class="form-control" id="niveles" name="niveles" value="{{ niveles }}" required>
   </div>
-  <div class="form-group">
+  {% comment %} <div class="form-group">
     <label for="contenido">Contenido:</label>
-    <input type="text" class="form-control" id="contenido" name="contenido" value="{{contenido}}" required>
+    <input type="text" class="form-control" id="contenido" name="contenido" value="{{contenido}}" required> {% endcomment %}
   </div>
   <img src="{{ imagen}}" alt="Código QR:">
   <div id="imagen">

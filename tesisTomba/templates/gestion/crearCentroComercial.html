@@ -138,10 +138,10 @@
     <label for="niveles">Niveles:</label>
     <input type="number" class="form-control" id="niveles" name="niveles" value="{{ request.POST.niveles }}" required>
   </div>
-  <div class="form-group">
+  {% comment %} <div class="form-group">
     <label for="contenido">Contenido para el codigo QR:</label>
     <input type="text" class="form-control" id="contenido" name="contenido" value="{{ request.POST.contenido }}" required>
-  </div>
+  </div> {% endcomment %}
  
   <button type="buttom" class="btn-generate-qr">Generar CodigoQR</button>
   <div id="qr-code">
