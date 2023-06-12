@@ -99,8 +99,8 @@ class Usuarios(viewsets.ViewSet):
     def scanner(request, usuarioID):
         usuario = DatosUsuarios.objects.get(id=usuarioID)
         user=usuario.usuario
-        cc = usuario.centroComercial.nombre
-        return render(request, 'scanner.html', {'cc':cc, 'usuario':user})
+        
+        return render(request, 'scanner.html', {'usuario':user})
 
 
 
