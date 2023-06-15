@@ -71,8 +71,13 @@ class Usuarios(viewsets.ViewSet):
         return render(request, 'admin.html')
     
     def listUsuario(request):
-        usuario = DatosUsuarios.objects.all()
-        
+        user=request.user
+        usuarios=DatosUsuarios.objects.get(usuario=user)
+        nombre = usuarios.usuario
+        tipoUsuarios= usuarios.tipoUsuario.tipo_usuario
+        if tipoUsuarios == 'Administrador':
+            usuario= DatosUsuarios.objects.exclude(usuario=nombre)
+            
         return render(request, 'usuario.html', {'usuario':usuario})
     
     def detalleUsuario(request, usuarioID):

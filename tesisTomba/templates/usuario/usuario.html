@@ -70,8 +70,8 @@
         }
         .btn-details-volver {
             position: absolute;
-            top: 7%;
-            right: 20px;
+            top: 3%;
+            left: 20px;
             transform: translateY(-50%);
             text-decoration: none;
             color: #333;
@@ -88,9 +88,10 @@
     </style>
 </head>
 <body>
+    {% include 'navbar.html' %}
     <h1>
-        USUARIOS:
-    </h1>||
+        LISTADO DE USUARIOS:
+    </h1>
     
     <ul>
         {% for usuario in usuario %}

@@ -105,10 +105,11 @@
     </style>
 </head>
 <body>
+    {% include 'navbar.html' %}
     <h1>
         Listado de Centros Comerciales
     </h1>
-    <a href="{% url 'estacionamiento:crearCentroComercial' %}" class="btn-add">Agregar</a>
+    <a href="{% url 'estacionamiento:crearCentroComercial' %}" class="btn-add">+</a>
     <ul>
         {% for centro in cc %}
             <li>

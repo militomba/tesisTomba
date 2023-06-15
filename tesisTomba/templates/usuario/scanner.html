@@ -3,12 +3,15 @@
 <html>
 <head>
   <title>Escaneo de códigos QR</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.4/html5-qrcode.min.js" integrity="sha512-k/KAe4Yff9EUdYI5/IAHlwUswqeipP+Cp5qnrsUjTPCgl51La2/JhyyjNciztD7mWNKLSXci48m7cctATKfLlQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <style>
     main {
         display: flex;
+        flex-direction: column;
         justify-content: center;
         align-items: center;
+        margin-top: 100px; 
     }
     #reader {
         width: 600px;
@@ -21,8 +24,10 @@
 
 </head>
 <body>
-  <h1>Escaneo de códigos QR</h1>
+    {% include 'navbar.html' %}
+  
   <main>
+    <h1>Escaneo de códigos QR</h1>
     <div id="reader"></div>
     <div id="result"></div>
 </main>

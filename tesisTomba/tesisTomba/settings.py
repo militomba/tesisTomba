@@ -62,7 +62,8 @@ TEMPLATES = [
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS':  [os.path.join(BASE_DIR, 'templates/gestion'),
                   os.path.join(BASE_DIR, 'templates/funcion'),
-                  os.path.join(BASE_DIR, 'templates/usuario')],
+                  os.path.join(BASE_DIR, 'templates/usuario'),
+                  os.path.join(BASE_DIR, 'templates/modelo')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

@@ -61,30 +61,44 @@
             right: 0;
             text-decoration: none;
             color: #fff;
-            background-color: #ff0000;
+            background-color: #276e90;
             padding: 8px 16px;
             border-radius: 4px;
             font-weight: bold;
         }
         
         .btn-details-eliminar:hover {
-            background-color: #cc0000;
+            background-color: #0088cc;
         }
 
         .btn-details-editar {
             position: absolute;
-            top: 91%;
-            right: 120px;
-            transform: translateY(-50%);
+            bottom: 0;
+            right: 7%;
             text-decoration: none;
             color: #fff;
-            background-color: #00aaff; /* Color azul claro */
+            background-color: #276e90; /* Color azul claro */
             padding: 8px 16px;
             border-radius: 4px;
             font-weight: bold;
         }
         
         .btn-details-editar:hover {
+            background-color: #0088cc; /* Color azul claro más oscuro en hover */
+        }
+        .btn-details-liberar {
+            position: absolute;
+            bottom: 0;
+            right: 13%;
+            text-decoration: none;
+            color: #fff;
+            background-color: #276e90; /* Color azul claro */
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        
+        .btn-details-liberar:hover {
             background-color: #0088cc; /* Color azul claro más oscuro en hover */
         }
         .btn-details-lugar {
@@ -104,7 +118,10 @@
             background-color: #0088cc; /* Color azul claro más oscuro en hover */
         }
 
-
+        .qr-image {
+            max-width: 300px;
+            height: auto;
+        }
     </style>
 </head>
 <body>
@@ -116,11 +133,12 @@
         <p><strong>NIVEL:</strong> {{ nivel }}</p>
         <a href="{% url 'estacionamiento:eliminarLugar' lugar %}" class="btn-details-eliminar">ELIMINAR</a>
         <a href="{% url 'estacionamiento:editarLugar' centroComercial  lugar %}" class="btn-details-editar">EDITAR</a>
+       {% comment %} <a href="{% url 'estacionamiento:liberarLugar' lugar%}" class="btn-details-liberar">LIBERAR</a> {% endcomment %}
         <p><strong>CODIGO QR:</p>
             {% if qr_vacio %}
             <p>No hay código QR disponible para este lugar.</p>
         {% else %}
-            <img src="{{ qr.url }}" alt="Código QR">
+            <img class="qr-image" src="{{ qr.url }}" alt="Código QR">
         {% endif %}
     </div>
     <a href="{% url 'estacionamiento:listLugares' centroComercial%}" class="btn-details">VOLVER</a>

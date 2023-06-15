@@ -3,16 +3,29 @@
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>CENTRO COMERCIAL</title>
+        <style>
+            .header {
+                width: 100%;
+                background-color: black;
+                color: white;
+                padding: 5px;
+                box-sizing: border-box;
+            }
+            .qr-image {
+                max-width: 300px;
+                height: auto;
+            }
+        </style>
        
     </head>
     <body>
-        <div style="display: inline-block; background-color: black; color: white; padding: 5px;">
+        <div class="header">
             <h1>CENTRO COMERCIAL {{centroComercial}}</h1>
         </div>
         
         <h2>Lugar Asignado: {{ lugar.lugar }}</h2>
         <h2>Nivel: {{ lugar.nivel }}</h2>
-        <img src="{{ imagen }}" alt="Codigo QR">
+        <img class="qr-image" src="{{ imagen }}" alt="Codigo QR">
         
         <h2>Fecha: {{fecha}}</h2>
         <h2>Hora de entrada: {{horario}}</h2>

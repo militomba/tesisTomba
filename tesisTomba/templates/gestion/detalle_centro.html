@@ -117,7 +117,9 @@
         <img src="{{ imagen }}" alt="Código QR de {{ nombre }}">
         <a href="{% url 'estacionamiento:eliminarCentro' nombre %}" class="btn-details-eliminar">ELIMINAR</a>
         <a href="{% url 'estacionamiento:edicionCentro' nombre %}" class="btn-details-editar">EDITAR</a>
+        {% if tipoUsuario == 'Centro Comercial' %}
         <a href="{% url 'estacionamiento:listLugares' nombre  %}" class="btn-details-lugar">LUGARES</a>
+        {% endif %}
     </div>
     <a href="{% url 'estacionamiento:centroComercial' %}" class="btn-details">VOLVER A LA PAGINA PRINCIPAL</a>
     

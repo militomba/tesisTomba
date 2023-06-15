@@ -30,7 +30,6 @@ class CentrosComercialesViews(viewsets.ViewSet):
         return render(request, 'detalle_centro.html', {'nombre': centro.nombre,'cantLugares': centro.cantidadLugares,'niveles':centro.niveles ,'imagen': centro.imagen.url})
         #return render(request, 'detalle_centro.html', {'cc': centro})
 
-
     def crearCentroComercial(request):
         if request.method == 'POST':
             nombre = request.POST.get('nombre')
@@ -105,12 +104,14 @@ class LugaresViews(viewsets.ViewSet):
         centroComercial = get_object_or_404(CentroComercialEspecifico, nombre=nombreCC)
 
         lugar= Lugar.objects.filter(id_cc=centroComercial)
+ 
         return render(request, 'gestionLugares.html', {'lugar':lugar, 'centroComecial':centroComercial})            
 
     def detalleLugar(request, lugar, id_cc):
         detalleLugar= Lugar.objects.get(lugar=lugar, id_cc=id_cc)
         status = detalleLugar.status
         centroComercial = detalleLugar.id_cc.nombre
+        cantidadLugares = detalleLugar.id_cc.cantidadLugares
         qr = detalleLugar.codigo_qr        
         if status == True:
             status="ACTIVO"
@@ -122,7 +123,6 @@ class LugaresViews(viewsets.ViewSet):
             qr_vacio = True
         return render(request, 'detalleLugar.html', {'lugar': detalleLugar.lugar, 'status':status, 'nivel':detalleLugar.nivel, 'centroComercial':centroComercial, 'qr':qr, 'qr_vacio': qr_vacio, 'id_cc':detalleLugar.id_cc})
     
-
     def eliminarLugar(request, lugar):
         lugar = Lugar.objects.get(lugar=lugar)
         cc = lugar.id_cc.nombre
@@ -131,7 +131,6 @@ class LugaresViews(viewsets.ViewSet):
             return redirect('estacionamiento:listLugares', cc) 
         return render(request, 'eliminarLugar.html', {'lugar':lugar})
                 
-    
     def crearLugar(request, id_cc):
         centroComercial=CentroComercialEspecifico.objects.get(id=id_cc)
         if request.method == 'POST':
@@ -190,14 +189,14 @@ class LugaresViews(viewsets.ViewSet):
 class Funciones(viewsets.ViewSet):
     def asignarLugar(cc):
         centroComercial=CentroComercialEspecifico.objects.get(nombre=cc)
-        print('--------')
-        print(centroComercial)
-        print('--------')
+
         lugarAsignado = Lugar.objects.filter(status=True, id_cc=centroComercial.id).first()
+  
         
         if lugarAsignado is None:
             #hacer funcion para verificar si hay alguno expirado y asignar ese
             return None
+        
         
         lugarAsignado.status = False
         lugarAsignado.save()

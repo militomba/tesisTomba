@@ -3,6 +3,7 @@
 <html>
 <head>
     <title>Iniciar sesión</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -11,7 +12,7 @@
 
         .container {
             max-width: 400px;
-            margin: 0 auto;
+            margin: 10% auto;
             padding: 20px;
             background-color: #fff;
             border-radius: 5px;
@@ -67,10 +68,17 @@
             color: red;
             margin-bottom: 10px;
         }
+        #imagen {
+            width: 300px;
+            height: 300px;
+        }
     </style>
 </head>
 <body>
+    {% include 'navbar.html' %}
+    
     <div class="container">
+        {% comment %} <img src="/templates/modelo/logo2.png" alt="Imagen"> {% endcomment %}
         <h1>Iniciar sesión</h1>
 
         {% if error %}

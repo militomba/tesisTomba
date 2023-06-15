@@ -70,6 +70,23 @@
             background-color: #0056b3;
             color: #fff;
         }
+        .btn-qr {
+            text-decoration: none;
+            top: 7%;
+            right: 20px;
+            color: #333;
+            background-color: #e7e7e7;
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-weight: bold;
+            float: right;
+            margin-top: -50px;;
+        }
+
+        .btn-qr:hover {
+            background-color: #0056b3;
+            color: #fff;
+        }
         .btn-details-volver {
             position: absolute;
             top: 3%;
@@ -112,29 +129,35 @@
     </style>
 </head>
 <body>
-    
+    {% include 'navbar.html' %}
     <h1>
        CENTRO COMERCIAL {{centroComecial.nombre}}
     </h1>
-   
+    <a href="{% url 'estacionamiento:cc' centroComecial.nombre%}" class="btn-qr">CODIGO QR</a>
     <h2>
         LISTADO DE LUGARES:
      </h2>
     {% comment %} <a href="{% url 'estacionamiento:detalle_centro' centroComecial.nombre %}" class="btn-details-volver">VOLVER </a> {% endcomment %}
      
    
-    <a href="{% url 'estacionamiento:crearLugar' centroComecial.id%}" class="btn-add">Agregar Lugar</a>    
+    <a href="{% url 'estacionamiento:crearLugar' centroComecial.id%}" class="btn-add">+</a>    
 
     <ul>
         {% for lugar in lugar %}
             <li>
                 <h2>LUGAR: {{ lugar.lugar }}</h2>
+                {% if lugar.status == True %}
+                <h2>Disponible</h2>
+                {% else %}
+                <h2>No disponible</h2>
+                {% endif %}
+                
                 <a href="{% url 'estacionamiento:detalleLugar' lugar.lugar  centroComecial.id%}" class="btn-details">Ver detalles</a>
                 
             </li>
         {% endfor %}
     </ul>
-        <a href="{% url 'usuarios:logout' %}" class="btn-details-logout">Cerrar Sesión</a>
+        {% comment %} <a href="{% url 'usuarios:logout' %}" class="btn-details-logout">Cerrar Sesión</a> {% endcomment %}
 
 </body>
 </html>
