@@ -1,5 +1,6 @@
 from datetime import datetime
 from pyexpat.errors import messages
+from django.conf import settings
 from django.contrib import messages
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Lugar, LugarOcupado, CentroComercialEspecifico
@@ -19,6 +20,7 @@ from jwt.exceptions import InvalidTokenError
 from datetime import datetime, timedelta
 from django.core import serializers
 from django.contrib.auth.decorators import login_required
+import os
 
 class CentrosComercialesViews(viewsets.ViewSet):
     def listCentroComercial(request):
@@ -188,6 +190,7 @@ class LugaresViews(viewsets.ViewSet):
 
 class Funciones(viewsets.ViewSet):
     def asignarLugar(cc):
+        
         centroComercial=CentroComercialEspecifico.objects.get(nombre=cc)
 
         lugarAsignado = Lugar.objects.filter(status=True, id_cc=centroComercial.id).first()
@@ -212,12 +215,12 @@ class Funciones(viewsets.ViewSet):
         
         
         
-        archico_jwt={
+        archivo_jwt={
             'lugar':lugarOcupado.lugar.lugar,
             'exp': datetime.utcnow() + timedelta(hours=24)
         }
 
-        token = jwt.encode(archico_jwt, 'Alaska.1234', algorithm='HS256')
+        token = jwt.encode(archivo_jwt, 'Alaska.1234', algorithm='HS256')
         
 
         #generar codigo QR
@@ -249,7 +252,7 @@ class Funciones(viewsets.ViewSet):
         
         return info
 
-    
+
 
     @login_required
     def liberarLugar(request, lugar):
@@ -278,37 +281,63 @@ class Funciones(viewsets.ViewSet):
             #return HttpResponse('Lugar '+str(lugarAsignado.lugar)+' liberado exitosamente')
         except InvalidTokenError:
             return HttpResponse("Token inválido")
+        
+
 
     def detalleLugar(request, cc):
-        cc = CentroComercialEspecifico.objects.get(nombre=cc)
-        
-        infoLugar = Funciones.asignarLugar(cc)
-        
-        if infoLugar:
-            lugar = infoLugar['lugar']
-            nivel =infoLugar['nivel']
-            imagen = infoLugar['imagen']
-            fecha=infoLugar['fecha']
-            hora = infoLugar['horario']
-            centroComercial = infoLugar['centroComercial']
+        token = request.GET.get('token')
+        try:
+            payload = jwt.decode(token, '1234', algorithms=['HS256'])
+            cc = CentroComercialEspecifico.objects.get(nombre=cc)
             
+            infoLugar = Funciones.asignarLugar(cc)
             
-            context={
-                'lugar': lugar,
-                'nivel':nivel,
-                'fecha':fecha,
-                'horario':hora,
-                'imagen': imagen,
-                'centroComercial': centroComercial
-            }
-            
+            if infoLugar:
+                lugar = infoLugar['lugar']
+                nivel =infoLugar['nivel']
+                imagen = infoLugar['imagen']
+                fecha=infoLugar['fecha']
+                hora = infoLugar['horario']
+                centroComercial = infoLugar['centroComercial']
+                
+                
+                context={
+                    'lugar': lugar,
+                    'nivel':nivel,
+                    'fecha':fecha,
+                    'horario':hora,
+                    'imagen': imagen,
+                    'centroComercial': centroComercial
+                }
+                
 
-            return render(request, 'detalleLugarAsignado.html', context)
-        else:
+                return render(request, 'detalleLugarAsignado.html', context)
+            else:
+                archivo_jwt={
+                'cc':cc.nombre,
+                'exp': datetime.utcnow() + timedelta(hours=24)
+                }
+
+                token = jwt.encode(archivo_jwt, 'Alaska.1234', algorithm='HS256')
+                
+
+                #generar codigo QR
+                qr = qrcode.QRCode(version=1, box_size=10, border=5)
+                qr.add_data('abrirBarrera/?token=' + token)
+                qr.make(fit=True)
+                img = qr.make_image(fill='black', back_color='white')
+                qr_filename = cc.nombre + '.png'
+                qr_path = os.path.join(settings.MEDIA_ROOT, qr_filename)
+                img.save(qr_path)
+
+                # Obtener la URL del archivo QR
+                qr_url = os.path.join(settings.MEDIA_URL, qr_filename)
+                
+                return render(request, 'sin_lugares.html', {'cc':cc.nombre, 'imagen':qr_url})
             
-            # Si no hay lugares disponibles, renderizar un template con un mensaje indicando que no hay lugares disponibles
-            return render(request, 'sin_lugares.html')
-        
+            
+        except InvalidTokenError:
+            return HttpResponse("Token inválido")
 
     def centroComercial(request, nombre):
         centro_comercial = CentroComercialEspecifico.objects.get(nombre__iexact=nombre)

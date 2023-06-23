@@ -103,7 +103,10 @@
         .btn-details-lugar:hover {
             background-color: #0088cc; /* Color azul claro más oscuro en hover */
         }
-
+        .qr-image {
+            max-width: 300px;
+            height: auto;
+        }
 
     </style>
 </head>
@@ -114,7 +117,7 @@
     <div class="details-container">
         <p><strong>Cantidad de Lugares:</strong> {{ cantLugares }}</p>
         <p><strong>Niveles:</strong> {{ niveles }}</p>
-        <img src="{{ imagen }}" alt="Código QR de {{ nombre }}">
+        <img class = qr-image src="{{ imagen }}" alt="Código QR de {{ nombre }}">
         <a href="{% url 'estacionamiento:eliminarCentro' nombre %}" class="btn-details-eliminar">ELIMINAR</a>
         <a href="{% url 'estacionamiento:edicionCentro' nombre %}" class="btn-details-editar">EDITAR</a>
         {% if tipoUsuario == 'Centro Comercial' %}

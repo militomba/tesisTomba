@@ -110,6 +110,10 @@
         #qr-code {
             max-width: 200px;
         }
+        .qr-image {
+          max-width: 300px;
+          height: auto;
+      }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/qrcode@1.4.4/dist/qrcode.min.js"></script>
 </head>
@@ -147,7 +151,7 @@
   <div id="qr-code">
     {% if qr_code %}
       <h2>Código QR:</h2>
-      <img src="{{ qr_code }}" alt="Código QR">
+      <img class= qr-image src="{{ qr_code }}" alt="Código QR">
     {% endif %}
   </div>
 

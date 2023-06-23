@@ -14,12 +14,21 @@
         margin-top: 100px; 
     }
     #reader {
-        width: 600px;
+        width: 350px;
     }
     #result {
         text-align: center;
         font-size: 1.5rem;
     }
+    .button {
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: #276e90;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
 </style>
 
 </head>
@@ -27,7 +36,7 @@
     {% include 'navbar.html' %}
   
   <main>
-    <h1>Escaneo de códigos QR</h1>
+    <h1>ESCANEAR CODIGO QR</h1>
     <div id="reader"></div>
     <div id="result"></div>
 </main>
@@ -49,8 +58,8 @@
     function success(result) {
 
         document.getElementById('result').innerHTML = `
-        <h2>Success!</h2>
-        <p><a href="${result}">${result}</a></p>
+        <h2>¡Escaneado con exito!</h2>
+        <p><button class="button" onclick="location.href='${result}'">LIBERAR LUGAR</button></p>
         `;
         // Prints result as a link inside result element
 

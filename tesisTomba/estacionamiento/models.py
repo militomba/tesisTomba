@@ -6,6 +6,7 @@ from django.core.files.base import ContentFile
 import uuid
 from PIL import Image
 from django.core.exceptions import ValidationError
+import jwt
 
 
 
@@ -22,11 +23,13 @@ class CentroComercialEspecifico(models.Model):
    
     def crear_centro_comercial(self, *args, **kwargs):
         self.nombre = self.nombre.upper()
-         # Generar el contenido del código QR
-        # contenido = self.contenido
-         # Crear el código QR
+
+        archivojwt = {
+            'centroComercial':self.nombre,
+        }
+        token = jwt.encode(archivojwt, '1234', algorithm='HS256')
         qr = qrcode.QRCode(version=1, box_size=10, border=5)
-        qr.add_data('https://192.168.54.175:8081/funcion/detalleLugarAsignado/'+self.nombre+'/')
+        qr.add_data('https://192.168.54.175:8081/funcion/detalleLugarAsignado/'+self.nombre+'/?token=' + token)
         qr.make(fit=True)
         # Generar la imagen del código QR
         img = qr.make_image(fill='black', back_color='white')
